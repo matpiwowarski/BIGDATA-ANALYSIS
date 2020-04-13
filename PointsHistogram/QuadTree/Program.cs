@@ -14,13 +14,13 @@ namespace QuadTree
             }
             else
             {*/
-            QuadTree quadTree = new QuadTree(0, 0, 127, 127);
-            Point point1 = new Point(40, 45, 1, 1);
-            Point point2 = new Point(70, 10, 1, 1);
-            Point point3 = new Point(69, 50, 1, 1);
-            Point point4 = new Point(15, 70, 1, 1);
-            Point point5 = new Point(55, 80, 1, 1);
-            Point point6 = new Point(80, 90, 1, 1);
+            QuadTree quadTree = new QuadTree(0, 0, 10, 10);
+            Point point1 = new Point(0.5, 0.5, 1, 1);
+            Point point2 = new Point(5.5, 5.5, 1, 1);
+            Point point3 = new Point(0.5, 5.5, 1, 1);
+            Point point4 = new Point(5.5, 0.5, 1, 1);
+            Point point5 = new Point(4, 4, 1, 1);
+            Point point6 = new Point(5, 5, 1, 1);
 
             quadTree.Set(point1);
             quadTree.Set(point2);

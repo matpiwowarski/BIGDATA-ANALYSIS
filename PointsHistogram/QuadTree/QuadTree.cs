@@ -10,13 +10,9 @@ namespace QuadTree
             Root = new Node(startX, startY, endX, endY, null);
         }
 
-        public void Set(Point point)
+        public void TryToInsert(Point point)
         {
-            if(point.X < Root.StartX || point.Y < Root.StartY || point.X > Root.EndX || point.Y > Root.EndY)
-            {
-                return;
-            }
-            else
+            if (point.X > Root.StartX && point.Y > Root.StartY && point.X < Root.EndX && point.Y < Root.EndY)
             {
                 Insert(Root, point);
             }
