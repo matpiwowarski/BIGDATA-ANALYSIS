@@ -3,81 +3,101 @@ namespace QuadTree
 {
     public class QuadTree
     {
+        // top left
+        public double StartX;
+        public double StartY;
+        // bot right
+        public double EndX;
+        public double EndY;
+
         public Point CurrentPoint;
 
         // Children of this tree 
-        public QuadTree topLeftTree;
-        public QuadTree topRightTree;
-        public QuadTree botLeftTree;
-        public QuadTree botRightTree;
+        public QuadTree TopLeftTree;
+        public QuadTree TopRightTree;
+        public QuadTree BotLeftTree;
+        public QuadTree BotRightTree;
 
         // constructors
-        public QuadTree()
+        public QuadTree(double startX, double startY, double endX, double endY)
         {
-
+            StartX = startX;
+            StartY = startY;
+            EndX = endX;
+            EndY = endY;
         }
 
         // methods
 
         public void Insert(Point point)
         {
-            /*
-            if(InBoundary(point.Position) == false)
-            {
+            if (point == null)
                 return;
-            }
-            */
 
-            if(CurrentPoint == null)
+            if (InBoundary(point.X, point.Y) == false)
+                return;
+
+
+            // checking if we are in final place
+            if(Math.Abs(StartX - EndX) <= 1 && Math.Abs(StartY - EndY) <= 1)
             {
-                CurrentPoint = point;
+                if(CurrentPoint == null)
+                {
+                    CurrentPoint = point;
+                }
                 return;
             }
 
             // left
-            if(point.X < this.CurrentPoint.X)
+            if ( (StartX + EndX) / 2 >= point.X)
             {
-                // top
-                if(point.Y < this.CurrentPoint.Y)
+                //left top
+                if((StartY + EndY) / 2 >= point.Y)
                 {
-                    if(topLeftTree == null)
-                        topLeftTree = new QuadTree();
-                    topLeftTree.Insert(point);
+                    if(TopLeftTree == null)
+                    {
+                        TopLeftTree = new QuadTree(StartX, StartY, (StartX+EndX)/2, (StartY+EndY)/2);
+                    }
+                    TopLeftTree.Insert(point);
                 }
-                else // bot
+                else //left bot
                 {
-                    if(botLeftTree == null)
-                        botLeftTree = new QuadTree();
-                    botLeftTree.Insert(point);
+                    if (BotLeftTree == null)
+                    {
+                        BotLeftTree = new QuadTree(StartX, (StartY+EndY)/2, (StartX + EndX)/2, EndY);
+                    }
+                    BotLeftTree.Insert(point);
                 }
             }
             else // right
             {
-                // top
-                if (point.Y < this.CurrentPoint.Y)
+                //right top
+                if ((StartY + EndY) / 2 >= point.Y)
                 {
-                    if(topRightTree == null)
-                        topRightTree = new QuadTree();
-                    topRightTree.Insert(point);
+                    if (TopRightTree == null)
+                    {
+                        TopRightTree = new QuadTree((StartX + EndX) / 2, StartY, EndX, (StartY + EndY) / 2);
+                    }
+                    TopRightTree.Insert(point);
                 }
-                else // bot
+                else //right bot
                 {
-                    if(botRightTree == null)
-                        botRightTree = new QuadTree();
-                    botRightTree.Insert(point);
+                    if (BotRightTree == null)
+                    {
+                        BotRightTree = new QuadTree((StartX + EndX) / 2, (StartY + EndY) / 2, EndX, EndY);
+                    }
+                    BotRightTree.Insert(point);
                 }
             }
-            
-        } 
-
-        /*
-        public bool InBoundary(Position position)
+        }
+        
+        public bool InBoundary(double x, double y)
         {
             // checking X
-            if(position.X >= TopLeft.X && position.X <= BotRight.X)
+            if(x >= StartX && x <= EndX)
             {
                 // checking Y
-                if(position.Y >= TopLeft.Y && position.Y <= BotRight.Y)
+                if(y >= StartY && y <= EndY)
                 {
                     // position is inside boundary
                     return true;
@@ -87,7 +107,6 @@ namespace QuadTree
             // position is outside boundary
             return false;
         }
-        */
-
+       
     }
 }
