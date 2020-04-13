@@ -35,10 +35,10 @@ namespace QuadTree
             }
 
             // left
-            if(point.Position.X < this.CurrentPoint.Position.X)
+            if(point.X < this.CurrentPoint.X)
             {
                 // top
-                if(point.Position.Y < this.CurrentPoint.Position.Y)
+                if(point.Y < this.CurrentPoint.Y)
                 {
                     if(topLeftTree == null)
                         topLeftTree = new QuadTree();
@@ -54,7 +54,7 @@ namespace QuadTree
             else // right
             {
                 // top
-                if (point.Position.Y < this.CurrentPoint.Position.Y)
+                if (point.Y < this.CurrentPoint.Y)
                 {
                     if(topRightTree == null)
                         topRightTree = new QuadTree();

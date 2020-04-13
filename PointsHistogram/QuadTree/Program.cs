@@ -26,10 +26,7 @@ namespace QuadTree
                         double z = double.Parse(tokens[2]);
                         short i = short.Parse(tokens[3]);
 
-                        // x, y
-                        Position position = new Position(x, y);
-                        // z, i 
-                        Point point = new Point(position, z, i);
+                        Point point = new Point(x, y, z, i);
 
                         quadTree.Insert(point);
                     }
