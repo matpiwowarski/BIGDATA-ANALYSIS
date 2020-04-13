@@ -5,40 +5,49 @@ namespace QuadTree
 {
     class MainClass
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            QuadTree quadTree = new QuadTree();
-
-            try
+            /*if (args.Length < 2)
             {
-                // Read file using StreamReader. Reads file line by line    
-                using (StreamReader file = new StreamReader("test.txt"))
+                System.Console.WriteLine("Plese run program:\n program <input_file.txt> <preprocessed_file>");
+                return 1;
+            }
+            else
+            {*/
+                QuadTree quadTree = new QuadTree();
+
+                try
                 {
-                    string ln;
-
-                    while ((ln = file.ReadLine()) != null)
+                    // Read file using StreamReader. Reads file line by line    
+                    using (StreamReader file = new StreamReader("test.txt")) // (args[0])
                     {
-                        ln = ln.Replace(".", ",");
-                        string[] tokens = ln.Split(' ');
+                        string ln;
 
-                        double x = double.Parse(tokens[0]);
-                        double y = double.Parse(tokens[1]);
-                        double z = double.Parse(tokens[2]);
-                        short i = short.Parse(tokens[3]);
+                        while ((ln = file.ReadLine()) != null)
+                        {
+                            ln = ln.Replace(".", ",");
+                            string[] tokens = ln.Split(' ');
 
-                        Point point = new Point(x, y, z, i);
+                            double x = double.Parse(tokens[0]);
+                            double y = double.Parse(tokens[1]);
+                            double z = double.Parse(tokens[2]);
+                            short i = short.Parse(tokens[3]);
 
-                        quadTree.Insert(point);
+                            Point point = new Point(x, y, z, i);
+
+                            quadTree.Insert(point);
+                        }
+                        file.Close();
                     }
-                    file.Close();
                 }
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
+                catch (IOException e)
+                {
+                    Console.WriteLine("The file could not be read:");
+                    Console.WriteLine(e.Message);
+                }
+            //}
 
+            return 0;
         }
     }
 }
