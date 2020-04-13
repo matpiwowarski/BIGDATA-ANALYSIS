@@ -80,9 +80,9 @@ namespace QuadTree
                 // TopRightTree
                 if ((TopLeft.Y + BotRight.Y) / 2 >= point.Position.Y)
                 {
-                    if (topLeftTree == null)
+                    if (topRightTree == null)
                     {
-                        topLeftTree = new QuadTree(
+                        topRightTree = new QuadTree(
                             new Position((TopLeft.X + BotRight.X) / 2, TopLeft.Y),
                             new Position(BotRight.X, (TopLeft.Y + BotRight.Y) / 2)
                             );
@@ -91,9 +91,9 @@ namespace QuadTree
                 }
                 else // BotRightTree
                 {
-                    if (botLeftTree == null)
+                    if (botRightTree == null)
                     {
-                        botLeftTree = new QuadTree(
+                        botRightTree = new QuadTree(
                             new Position((TopLeft.X + BotRight.X) / 2, (TopLeft.Y + BotRight.Y) / 2),
                             new Position(BotRight.X, BotRight.Y)
                     );
