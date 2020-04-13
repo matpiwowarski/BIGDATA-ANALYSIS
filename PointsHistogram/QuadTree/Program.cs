@@ -45,10 +45,38 @@ namespace QuadTree
                     Console.WriteLine("The file could not be read:");
                     Console.WriteLine(e.Message);
                 }
-                
+
             //}
 
+            DisplayQuadTree(quadTree);
+
             return 0;
+        }
+
+        static public void DisplayQuadTree(QuadTree q)
+        {
+            DisplayNodeWithChildren(q.Root);
+        }
+
+        private static void DisplayNodeWithChildren(Node node)
+        {
+            if(node.nodeType == NodeType.LEAF)
+            {
+                DisplayPoint(node.Point);
+                return;
+            }
+            else if(node.nodeType == NodeType.BRANCH)
+            {
+                DisplayNodeWithChildren(node.NW);
+                DisplayNodeWithChildren(node.NE);
+                DisplayNodeWithChildren(node.SE);
+                DisplayNodeWithChildren(node.SW);
+            }
+        }
+
+        private static void DisplayPoint(Point point)
+        {
+            Console.WriteLine(point.I);
         }
     }
 }
