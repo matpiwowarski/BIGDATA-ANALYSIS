@@ -18,46 +18,41 @@ namespace QuadTree
             }
         }
 
-        private void Insert(Node parent, Point point)
+        private void Insert(Node node, Point point)
         {
-            switch(parent.nodeType)
+            switch(node.nodeType)
             {
                 case NodeType.EMPTY:
-                    SetPointForNode(parent, point);
+                    // rewrite point
+                    node.nodeType = NodeType.LEAF;
+                    node.Point = point;
                     break;
                 case NodeType.LEAF:
-                    if((parent.StartX + parent.EndX)/2 == point.X && (parent.StartY+parent.EndY)/2 == point.Y)
-                    {
-                        SetPointForNode(parent, point);
-                    }
-                    else
-                    {
-                        Split(parent);
-                        Insert(parent, point);
-                    }
+                    MakeBranch(node); // transform LEAF => BRANCH
+                    Insert(node, point); // add new LEAF into BRANCH
                     break;
-                case NodeType.BRANCH:
-                    Insert(getQuadrant(parent, point.X, point.Y), point);
+                case NodeType.BRANCH: // recursion 
+                    Insert(PartOfNode(node, point.X, point.Y), point);
                     break;
                 default:
                     break;
             }
         }
 
-        private Node getQuadrant(Node parent, double x, double y)
+        private Node PartOfNode(Node node, double x, double y)
         {
-            double centerX = (parent.StartX + parent.EndX) / 2;
-            double centerY = (parent.StartY + parent.EndY) / 2;
+            double centerX = (node.StartX + node.EndX) / 2;
+            double centerY = (node.StartY + node.EndY) / 2;
 
             if(x < centerX) // left
             {
                 if(y < centerY) // top
                 {
-                    return parent.NW;
+                    return node.NW;
                 }
                 else // bot
                 {
-                    return parent.SW;
+                    return node.SW;
                 }
 
             }
@@ -65,42 +60,32 @@ namespace QuadTree
             {
                 if (y < centerY) // top
                 {
-                    return parent.NE;
+                    return node.NE;
                 }
                 else // bot
                 {
-                    return parent.SE;
+                    return node.SE;
                 }
             }
         }
 
-        private void Split(Node parent)
+        private void MakeBranch(Node node)
         {
-            Point oldPoint = new Point(parent.Point.X, parent.Point.Y, parent.Point.Z, parent.Point.I);
-            parent.Point = null;
-            parent.nodeType = NodeType.BRANCH;
+            Point rememberPoint = new Point(node.Point.X, node.Point.Y, node.Point.Z, node.Point.I);
+            node.Point = null;
+            node.nodeType = NodeType.BRANCH;
 
-            double startX = parent.StartX;
-            double startY = parent.StartY;
-            double endX = parent.EndX;
-            double endY = parent.EndY;
+            double startX = node.StartX;
+            double startY = node.StartY;
+            double endX = node.EndX;
+            double endY = node.EndY;
 
-            parent.NW = new Node(startX, startY, (startX + endX) / 2, (startY + endY) / 2, parent);
-            parent.NE = new Node((startX + endX) / 2, startY, endX, (startY + endY) / 2, parent);
-            parent.SW = new Node(startX, (startY + endY) / 2, (startX + endX) / 2, endY, parent);
-            parent.SE = new Node((startX + endX) / 2, (startY + endY) / 2, endX, endY, parent);
+            node.NW = new Node(startX, startY, (startX + endX) / 2, (startY + endY) / 2, node);
+            node.NE = new Node((startX + endX) / 2, startY, endX, (startY + endY) / 2, node);
+            node.SW = new Node(startX, (startY + endY) / 2, (startX + endX) / 2, endY, node);
+            node.SE = new Node((startX + endX) / 2, (startY + endY) / 2, endX, endY, node);
 
-            Insert(parent, oldPoint);
-        }
-
-        private void SetPointForNode(Node parent, Point point)
-        {
-            if(parent.nodeType == NodeType.BRANCH)
-            {
-                return;
-            }
-            parent.nodeType = NodeType.LEAF;
-            parent.Point = point;
+            Insert(node, rememberPoint);
         }
     }
 }

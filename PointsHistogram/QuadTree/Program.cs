@@ -14,21 +14,8 @@ namespace QuadTree
             }
             else
             {*/
-            QuadTree quadTree = new QuadTree(0, 0, 10, 10);
-            Point point1 = new Point(0.5, 0.5, 1, 1);
-            Point point2 = new Point(5.5, 5.5, 1, 1);
-            Point point3 = new Point(0.5, 5.5, 1, 1);
-            Point point4 = new Point(5.5, 0.5, 1, 1);
-            Point point5 = new Point(4, 4, 1, 1);
-            Point point6 = new Point(5, 5, 1, 1);
-
-            quadTree.Set(point1);
-            quadTree.Set(point2);
-            quadTree.Set(point3);
-            quadTree.Set(point4);
-            quadTree.Set(point5);
-            quadTree.Set(point6);
-            /*
+            QuadTree quadTree = new QuadTree(395169, 39536, 395170, 39538);
+            
                 try
                 {
                     // Read file using StreamReader. Reads file line by line    
@@ -48,7 +35,7 @@ namespace QuadTree
 
                             Point point = new Point(x, y, z, i);
 
-                            quadTree.Insert(point);
+                            quadTree.TryToInsert(point);
                         }
                         file.Close();
                     }
@@ -58,7 +45,7 @@ namespace QuadTree
                     Console.WriteLine("The file could not be read:");
                     Console.WriteLine(e.Message);
                 }
-                */
+                
             //}
 
             return 0;
