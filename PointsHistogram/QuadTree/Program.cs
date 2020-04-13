@@ -169,18 +169,18 @@ namespace QuadTree
 
         private static void DisplayNodeWithChildren(Node node)
         {
-            if(node.nodeType == NodeType.LEAF)
-            {
-                DisplayPoint(node.Point);
-                return;
-            }
-            else if(node.nodeType == NodeType.BRANCH)
+            if(node.nodeType == NodeType.BRANCH)
             {
                 DisplayNodeWithChildren(node.NW);
                 DisplayNodeWithChildren(node.NE);
                 DisplayNodeWithChildren(node.SE);
                 DisplayNodeWithChildren(node.SW);
                 Console.WriteLine();
+            }
+            else if (node.nodeType == NodeType.LEAF)
+            {
+                DisplayPoint(node.Point);
+                return;
             }
         }
 

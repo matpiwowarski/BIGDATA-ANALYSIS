@@ -12,7 +12,7 @@ namespace QuadTree
 
         public void TryToInsert(Point point)
         {
-            if (point.X > Root.StartX && point.Y > Root.StartY && point.X < Root.EndX && point.Y < Root.EndY)
+            if (point.X >= Root.StartX && point.Y >= Root.StartY && point.X <= Root.EndX && point.Y <= Root.EndY)
             {
                 Insert(Root, point);
             }
