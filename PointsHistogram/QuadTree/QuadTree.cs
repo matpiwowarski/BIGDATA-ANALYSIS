@@ -3,9 +3,6 @@ namespace QuadTree
 {
     public class QuadTree
     {
-        private Position TopLeft;
-        private Position BotRight;
-
         public Point CurrentPoint;
 
         // Children of this tree 
@@ -15,10 +12,14 @@ namespace QuadTree
         public QuadTree botRightTree;
 
         // constructors
-        public QuadTree(Position topLeft, Position botRight)
+        public QuadTree(Point startingPoint)
         {
-            TopLeft = topLeft;
-            BotRight = botRight;
+            CurrentPoint = startingPoint;
+        }
+
+        public QuadTree()
+        {
+
         }
 
         // methods
@@ -30,10 +31,12 @@ namespace QuadTree
                 return;
             }
 
+            /*
             if(InBoundary(point.Position) == false)
             {
                 return;
             }
+            */
 
             if(CurrentPoint == null)
             {
@@ -41,62 +44,43 @@ namespace QuadTree
                 return;
             }
 
-            // checking left
-            if((TopLeft.X + BotRight.X) / 2 >= point.Position.X)
+            // left
+            if(point.Position.X < this.CurrentPoint.Position.X)
             {
-                // TopLeftTree
-                if((TopLeft.Y + BotRight.Y) / 2 >= point.Position.Y)
+                // top
+                if(point.Position.Y < this.CurrentPoint.Position.Y)
                 {
-                    if (topLeftTree == null)
-                    {
-                        topLeftTree = new QuadTree(
-                            new Position(TopLeft.X, TopLeft.Y),
-                            new Position((TopLeft.X + BotRight.X) / 2, (TopLeft.Y + BotRight.Y) / 2)
-                            );
-                    }
+                    if(topLeftTree == null)
+                        topLeftTree = new QuadTree();
                     topLeftTree.Insert(point);
                 }
-                else // BotLeftTree
+                else // bot
                 {
                     if(botLeftTree == null)
-                    {
-                        botLeftTree = new QuadTree(
-                            new Position(TopLeft.X, (TopLeft.Y + BotRight.Y) / 2),
-                            new Position((TopLeft.X + BotRight.X) / 2, BotRight.Y)
-                    );
-                    }
+                        botLeftTree = new QuadTree();
                     botLeftTree.Insert(point);
                 }
             }
-            else // checking right
+            else // right
             {
-                // TopRightTree
-                if ((TopLeft.Y + BotRight.Y) / 2 >= point.Position.Y)
+                // top
+                if (point.Position.Y < this.CurrentPoint.Position.Y)
                 {
-                    if (topRightTree == null)
-                    {
-                        topRightTree = new QuadTree(
-                            new Position((TopLeft.X + BotRight.X) / 2, TopLeft.Y),
-                            new Position(BotRight.X, (TopLeft.Y + BotRight.Y) / 2)
-                            );
-                    }
+                    if(topRightTree == null)
+                        topRightTree = new QuadTree();
                     topRightTree.Insert(point);
                 }
-                else // BotRightTree
+                else // bot
                 {
-                    if (botRightTree == null)
-                    {
-                        botRightTree = new QuadTree(
-                            new Position((TopLeft.X + BotRight.X) / 2, (TopLeft.Y + BotRight.Y) / 2),
-                            new Position(BotRight.X, BotRight.Y)
-                    );
-                    }
+                    if(botRightTree == null)
+                        botRightTree = new QuadTree();
                     botRightTree.Insert(point);
                 }
             }
             
         } 
 
+        /*
         public bool InBoundary(Position position)
         {
             // checking X
@@ -113,6 +97,7 @@ namespace QuadTree
             // position is outside boundary
             return false;
         }
+        */
 
     }
 }

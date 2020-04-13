@@ -10,20 +10,13 @@ namespace QuadTree
             Point point2 = new Point(8, 1, 2, 2);
             Point point3 = new Point(6, 6, 3, 3);
             Point point4 = new Point(2, 6, 4, 4);
-            Point point5 = new Point(1, 7, 5, 5);
-            Point point6 = new Point(8, 6, 6, 6);
+            Point point5 = new Point(1, 6.5, 5, 5);
+            Point point6 = new Point(7.5, 5.5, 6, 6);
             Point point7 = new Point(5, 9, 7, 7);
 
-            double startingX = 0;
-            double endingX = 9;
-            double startingY = 0;
-            double endingY = 9;
-            Position startingPosition = new Position(startingX, startingY);
-            Position endingPosition = new Position(endingX, endingY);
 
-            QuadTree center = new QuadTree(startingPosition, endingPosition);
+            QuadTree center = new QuadTree(point1);
 
-            center.Insert(point1);
             center.Insert(point2);
             center.Insert(point3);
             center.Insert(point4);
