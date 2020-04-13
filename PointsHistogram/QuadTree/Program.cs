@@ -14,7 +14,7 @@ namespace QuadTree
             }
             else
             {*/
-            QuadTree quadTree = new QuadTree(0,0,127,127);
+            QuadTree quadTree = new QuadTree(0, 0, 127, 127);
             Point point1 = new Point(40, 45, 1, 1);
             Point point2 = new Point(70, 10, 1, 1);
             Point point3 = new Point(69, 50, 1, 1);
@@ -22,12 +22,12 @@ namespace QuadTree
             Point point5 = new Point(55, 80, 1, 1);
             Point point6 = new Point(80, 90, 1, 1);
 
-            quadTree.Insert(point1);
-            quadTree.Insert(point2);
-            quadTree.Insert(point3);
-            quadTree.Insert(point4);
-            quadTree.Insert(point5);
-            quadTree.Insert(point6);
+            quadTree.Set(point1);
+            quadTree.Set(point2);
+            quadTree.Set(point3);
+            quadTree.Set(point4);
+            quadTree.Set(point5);
+            quadTree.Set(point6);
             /*
                 try
                 {

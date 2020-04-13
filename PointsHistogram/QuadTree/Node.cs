@@ -10,7 +10,7 @@ namespace QuadTree
         public double EndY;
 
         public Node Parent;
-        public Point point;
+        public Point Point;
         public NodeType nodeType = NodeType.EMPTY;
 
         // children
