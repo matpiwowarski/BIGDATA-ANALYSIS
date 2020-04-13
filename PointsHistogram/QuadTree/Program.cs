@@ -6,13 +6,13 @@ namespace QuadTree
     {
         public static void Main(string[] args)
         {
-            Point point1 = new Point(3, 7, 235.98, 34);
-            Point point2 = new Point(8, 1, 234.95, 37);
-            Point point3 = new Point(6, 6, 246.70, 5);
-            Point point4 = new Point(2, 6, 236.67, 40);
-            Point point5 = new Point(1, 7, 238.30, 60);
-            Point point6 = new Point(8, 6, 241.38, 36);
-            Point point7 = new Point(5, 9, 1, 1);
+            Point point1 = new Point(3, 7, 1, 1);
+            Point point2 = new Point(8, 1, 2, 2);
+            Point point3 = new Point(6, 6, 3, 3);
+            Point point4 = new Point(2, 6, 4, 4);
+            Point point5 = new Point(1, 7, 5, 5);
+            Point point6 = new Point(8, 6, 6, 6);
+            Point point7 = new Point(5, 9, 7, 7);
 
             double startingX = 0;
             double endingX = 9;
@@ -30,6 +30,7 @@ namespace QuadTree
             center.Insert(point5);
             center.Insert(point6);
             center.Insert(point7);
+
         }
     }
 }

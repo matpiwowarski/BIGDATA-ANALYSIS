@@ -3,16 +3,16 @@ namespace QuadTree
 {
     public class QuadTree
     {
-        public Position TopLeft;
-        public Position BotRight;
+        private Position TopLeft;
+        private Position BotRight;
 
         public Point CurrentPoint;
 
         // Children of this tree 
-        QuadTree topLeftTree;
-        QuadTree topRightTree;
-        QuadTree botLeftTree;
-        QuadTree botRightTree;
+        public QuadTree topLeftTree;
+        public QuadTree topRightTree;
+        public QuadTree botLeftTree;
+        public QuadTree botRightTree;
 
         // constructors
         public QuadTree(Position topLeft, Position botRight)
@@ -35,17 +35,10 @@ namespace QuadTree
                 return;
             }
 
-
-            if(Math.Abs(TopLeft.X - BotRight.X) <= 1)
+            if(CurrentPoint == null)
             {
-                if(Math.Abs(TopLeft.Y - BotRight.Y) <= 1)
-                {
-                    if(CurrentPoint == null)
-                    {
-                        CurrentPoint = point;
-                        return;
-                    }
-                }
+                CurrentPoint = point;
+                return;
             }
 
             // checking left
