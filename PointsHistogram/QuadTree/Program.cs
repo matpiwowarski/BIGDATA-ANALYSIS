@@ -12,18 +12,24 @@ namespace QuadTree
             try
             {
                 // Read file using StreamReader. Reads file line by line    
-                using (StreamReader file = new StreamReader("input.txt"))
+                using (StreamReader file = new StreamReader("test.txt"))
                 {
                     string ln;
 
                     while ((ln = file.ReadLine()) != null)
                     {
+                        ln = ln.Replace(".", ",");
                         string[] tokens = ln.Split(' ');
 
+                        double x = double.Parse(tokens[0]);
+                        double y = double.Parse(tokens[1]);
+                        double z = double.Parse(tokens[2]);
+                        short i = short.Parse(tokens[3]);
+
                         // x, y
-                        Position position = new Position(Convert.ToDouble(tokens[0]), Convert.ToDouble(tokens[1]));
+                        Position position = new Position(x, y);
                         // z, i 
-                        Point point = new Point(position, Convert.ToDouble(tokens[2]), Convert.ToInt16(tokens[3]));
+                        Point point = new Point(position, z, i);
 
                         quadTree.Insert(point);
                     }
