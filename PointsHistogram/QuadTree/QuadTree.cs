@@ -3,10 +3,10 @@ namespace QuadTree
 {
     public class QuadTree
     {
-        public Point TopLeft;
-        public Point BotRight;
+        public Position TopLeft;
+        public Position BotRight;
 
-        public Node CurrentNode;
+        public Point CurrentNode;
 
         // Children of this tree 
         QuadTree topLeftTree;
@@ -15,9 +15,10 @@ namespace QuadTree
         QuadTree botRightTree;
 
         // constructors
-        public QuadTree()
+        public QuadTree(Position topLeft, Position botRight)
         {
-
+            TopLeft = topLeft;
+            BotRight = botRight;
         }
 
         // methods
