@@ -12,11 +12,6 @@ namespace QuadTree
         public QuadTree botRightTree;
 
         // constructors
-        public QuadTree(Point startingPoint)
-        {
-            CurrentPoint = startingPoint;
-        }
-
         public QuadTree()
         {
 
@@ -26,11 +21,6 @@ namespace QuadTree
 
         public void Insert(Point point)
         {
-            if(point == null)
-            {
-                return;
-            }
-
             /*
             if(InBoundary(point.Position) == false)
             {

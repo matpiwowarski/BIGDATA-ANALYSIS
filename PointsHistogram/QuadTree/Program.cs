@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace QuadTree
 {
@@ -6,23 +7,34 @@ namespace QuadTree
     {
         public static void Main(string[] args)
         {
-            Point point1 = new Point(3, 7, 1, 1);
-            Point point2 = new Point(8, 1, 2, 2);
-            Point point3 = new Point(6, 6, 3, 3);
-            Point point4 = new Point(2, 6, 4, 4);
-            Point point5 = new Point(1, 6.5, 5, 5);
-            Point point6 = new Point(7.5, 5.5, 6, 6);
-            Point point7 = new Point(5, 9, 7, 7);
+            QuadTree quadTree = new QuadTree();
 
+            try
+            {
+                // Read file using StreamReader. Reads file line by line    
+                using (StreamReader file = new StreamReader("input.txt"))
+                {
+                    string ln;
 
-            QuadTree center = new QuadTree(point1);
+                    while ((ln = file.ReadLine()) != null)
+                    {
+                        string[] tokens = ln.Split(' ');
 
-            center.Insert(point2);
-            center.Insert(point3);
-            center.Insert(point4);
-            center.Insert(point5);
-            center.Insert(point6);
-            center.Insert(point7);
+                        // x, y
+                        Position position = new Position(Convert.ToDouble(tokens[0]), Convert.ToDouble(tokens[1]));
+                        // z, i 
+                        Point point = new Point(position, Convert.ToDouble(tokens[2]), Convert.ToInt16(tokens[3]));
+
+                        quadTree.Insert(point);
+                    }
+                    file.Close();
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
 
         }
     }
