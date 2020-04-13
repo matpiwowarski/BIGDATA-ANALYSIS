@@ -6,13 +6,13 @@ namespace QuadTree
         public Point TopLeft;
         public Point BotRight;
 
-        public Point CurrentPoint;
+        public Node CurrentNode;
 
         // Children of this tree 
-        Quad* topLeftTree;
-        Quad* topRightTree;
-        Quad* botLeftTree;
-        Quad* botRightTree;
+        QuadTree topLeftTree;
+        QuadTree topRightTree;
+        QuadTree botLeftTree;
+        QuadTree botRightTree;
 
         // constructors
         public QuadTree()
