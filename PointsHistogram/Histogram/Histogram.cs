@@ -79,7 +79,7 @@ namespace Histogram
         {
 
             statisticalSummary.AverageValue = CalculateAverageValue();
-            statisticalSummary.StandardDeviation = CalculateStandardDeviation();
+            statisticalSummary.StandardDeviation = CalculateStandardDeviation(statisticalSummary.AverageValue);
             statisticalSummary.Skewness = CalculateSkewness();
             statisticalSummary.Kurtosis = CalculateKurtosis();
         }
@@ -92,10 +92,6 @@ namespace Histogram
             for(int k = 0; k < K; k++)
             {
                 nominator += Intervals[k].Val * Intervals[k].H;
-            }
-
-            for (int k = 0; k < K; k++)
-            {
                 denominator += Intervals[k].H;
             }
 
@@ -104,10 +100,16 @@ namespace Histogram
             return average;
         }
 
-        private double CalculateStandardDeviation()
+        private double CalculateStandardDeviation(double averageValue)
         {
             double nominator = 0;
             double denominator = 0;
+
+            for (int k = 0; k < K; k++)
+            {
+                nominator += Intervals[k].H * Math.Pow((Intervals[k].Val - averageValue), 2);
+                denominator += Intervals[k].H;
+            }
 
             double deviation = Math.Sqrt(nominator / denominator);
             return deviation;
