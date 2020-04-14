@@ -14,37 +14,39 @@ namespace Histogram
             }
             else
             {
+                long NumberOfDataReads = 0;
                 // read user parameters
-                var fileName = args[0];
-                var M = int.Parse(args[1]);
-                var B = int.Parse(args[2]);
-                var minX = Double.Parse(args[3]);
-                var maxX = Double.Parse(args[4]);
-                var minY = Double.Parse(args[5]);
-                var maxY = Double.Parse(args[6]);
-                var binSize = int.Parse(args[7]);
-                var selection = char.Parse(args[8].ToLower());
+                string fileName = args[0];
+                int M = int.Parse(args[1]);
+                int B = int.Parse(args[2]);
+                double minX = Double.Parse(args[3]);
+                double maxX = Double.Parse(args[4]);
+                double minY = Double.Parse(args[5]);
+                double maxY = Double.Parse(args[6]);
+                int binSize = int.Parse(args[7]);
+                char selection = char.Parse(args[8].ToLower());
 
-                SelectionType selectionType;
+                SelectionType selectionType = SelectionType.I;
                 if (selection == 'i')
                     selectionType = SelectionType.I;
                 else if (selection == 'z')
                     selectionType = SelectionType.Z;
 
                 // create histogram with bin size
-                Histogram histogram = new Histogram(5);
+                Histogram histogram = new Histogram(binSize);
                 // create empty summary
                 StatisticalSummary statisticalSummary = new StatisticalSummary();
 
                 try
                 {
                     // Read file using StreamReader. Reads file line by line    
-                    using (StreamReader file = new StreamReader("Korte_Vegetation_all.txt"))
+                    using (StreamReader file = new StreamReader(fileName))
                     {
                         string ln;
 
                         while ((ln = file.ReadLine()) != null)
                         {
+                            NumberOfDataReads++;
                             ln = ln.Replace(".", ",");
                             string[] tokens = ln.Split(' ');
 
@@ -53,8 +55,16 @@ namespace Histogram
 
                             if (x >= minX && x <= maxX && y >= minY && y <= maxY)
                             {
-                                short i = short.Parse(tokens[3]);
-                                histogram.InsertValue(i);
+                                if (selectionType == SelectionType.I)
+                                {
+                                    short i = short.Parse(tokens[3]);
+                                    histogram.InsertValue(i);
+                                }
+                                else if(selectionType == SelectionType.Z)
+                                {
+                                    double z = Double.Parse(tokens[3]);
+                                    histogram.InsertValue(z);
+                                }
                             }
                         }
                         file.Close();
@@ -71,7 +81,7 @@ namespace Histogram
                 histogram.MakeSummary(statisticalSummary);
 
                 // output
-                statisticalSummary.PrintReport(histogram.PointsCount);
+                statisticalSummary.PrintReport(histogram.PointsCount, NumberOfDataReads);
                 return 0;
             }
         }

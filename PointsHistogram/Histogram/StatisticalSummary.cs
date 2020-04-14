@@ -13,13 +13,14 @@ namespace Histogram
 
         }
 
-        public void PrintReport(int pointsCount)
+        public void PrintReport(int pointsCount, long dataReads)
         {
             Console.WriteLine("Number of points inside given bounding box: " + pointsCount);
             Console.WriteLine("Calculated average: " + Math.Round(AverageValue, 4));
             Console.WriteLine("Calculated deviation: " + Math.Round(StandardDeviation, 5));
             Console.WriteLine("Calculated skewness: " + Math.Round(Skewness, 5));
             Console.WriteLine("Calculated kurtosis: " + Math.Round(Kurtosis, 5));
+            Console.WriteLine("Number of data reads from the input file: " + dataReads);
         }
     }
 }
