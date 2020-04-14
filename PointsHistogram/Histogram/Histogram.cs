@@ -80,7 +80,7 @@ namespace Histogram
 
             statisticalSummary.AverageValue = CalculateAverageValue();
             statisticalSummary.StandardDeviation = CalculateStandardDeviation(statisticalSummary.AverageValue);
-            statisticalSummary.Skewness = CalculateSkewness();
+            statisticalSummary.Skewness = CalculateSkewness(statisticalSummary.AverageValue);
             statisticalSummary.Kurtosis = CalculateKurtosis();
         }
 
@@ -115,12 +115,32 @@ namespace Histogram
             return deviation;
         }
 
-        private double CalculateKurtosis()
+        private double CalculateSkewness(double averageValue)
         {
-            return 0;
+            double topNominator = 0;
+            double botNominator = 0;
+            double topDenominator = 0;
+            double botDenominator = 0;
+
+            for (int k = 0; k < K; k++)
+            {
+                topNominator += Intervals[k].H * Math.Pow((Intervals[k].Val - averageValue), 3);
+                topDenominator += Intervals[k].H;
+                botNominator += Intervals[k].H * Math.Pow((Intervals[k].Val - averageValue), 2);
+                botDenominator += Intervals[k].H;
+            }
+
+            botDenominator--; // -1
+
+            double mainNominator = topNominator / topDenominator;
+            double mainDenominator = Math.Pow(botNominator / botDenominator, 1.5);
+
+            double skweness = mainNominator / mainDenominator;
+
+            return skweness;
         }
 
-        private double CalculateSkewness()
+        private double CalculateKurtosis()
         {
             return 0;
         }
