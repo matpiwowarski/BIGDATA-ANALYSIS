@@ -7,16 +7,18 @@ namespace Histogram
     {
         public static void Main(string[] args)
         {
-            // read data
+            // read user parameters
             double minX = 394364;
             double maxX = 394374;
             double minY = 39150;
             double maxY = 39160;
 
-            // create histogram
-            Histogram histogram = new Histogram(4); // create histogram with bin size
+            // create histogram with bin size
+            Histogram histogram = new Histogram(4);
+            // create empty summary
             StatisticalSummary statisticalSummary = new StatisticalSummary();
 
+            // insert data from file into histogram
             histogram.InsertValue(1);
             histogram.InsertValue(2);
             histogram.InsertValue(3);
@@ -30,9 +32,6 @@ namespace Histogram
             histogram.InsertValue(21);
             histogram.InsertValue(22);
             histogram.InsertValue(25);
-
-            histogram.CreateIntervals();
-            histogram.MakeSummary(statisticalSummary);
 
             /*
             try
@@ -67,6 +66,8 @@ namespace Histogram
             */
 
             // statistics
+            histogram.CreateIntervals();
+            histogram.MakeSummary(statisticalSummary);
 
             // output
             statisticalSummary.PrintReport(histogram.PointsCount);

@@ -16,10 +16,10 @@ namespace Histogram
         public void PrintReport(int pointsCount)
         {
             Console.WriteLine("Number of points inside given bounding box: " + pointsCount);
-            Console.WriteLine("Calculated average: " + AverageValue);
-            Console.WriteLine("Calculated deviation: " + StandardDeviation);
-            Console.WriteLine("Calculated skewness: " + Skewness);
-            Console.WriteLine("Calculated kurtosis: " + Kurtosis);
+            Console.WriteLine("Calculated average: " + Math.Round(AverageValue, 4));
+            Console.WriteLine("Calculated deviation: " + Math.Round(StandardDeviation, 4));
+            Console.WriteLine("Calculated skewness: " + Math.Round(Skewness, 6));
+            Console.WriteLine("Calculated kurtosis: " + Math.Round(Kurtosis, 6));
         }
     }
 }

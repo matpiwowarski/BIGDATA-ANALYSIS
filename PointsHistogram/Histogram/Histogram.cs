@@ -6,9 +6,10 @@ namespace Histogram
     public class Histogram
     {
         public int BinSize = 0;
-        public int PointsCount { get => Values.Count; }
         public double Min = double.MaxValue; 
         public double Max = double.MinValue;
+        public int PointsCount { get => Values.Count; }
+        public int K { get => Intervals.Count; }
 
         public List<double> Values = new List<double>();
         public List<Interval> Intervals = new List<Interval>();
@@ -83,22 +84,41 @@ namespace Histogram
             statisticalSummary.Kurtosis = CalculateKurtosis();
         }
 
+        private double CalculateAverageValue()
+        {
+            double nominator = 0;
+            double denominator = 0;
+
+            for(int k = 0; k < K; k++)
+            {
+                nominator += Intervals[k].Val * Intervals[k].H;
+            }
+
+            for (int k = 0; k < K; k++)
+            {
+                denominator += Intervals[k].H;
+            }
+
+            double average = nominator / denominator;
+
+            return average;
+        }
+
+        private double CalculateStandardDeviation()
+        {
+            double nominator = 0;
+            double denominator = 0;
+
+            double deviation = Math.Sqrt(nominator / denominator);
+            return deviation;
+        }
+
         private double CalculateKurtosis()
         {
             return 0;
         }
 
         private double CalculateSkewness()
-        {
-            return 0;
-        }
-
-        private double CalculateStandardDeviation()
-        {
-            return 0;
-        }
-
-        private double CalculateAverageValue()
         {
             return 0;
         }
