@@ -50,6 +50,7 @@ namespace Histogram
             }
             while (maxIntervalValue <= Max);
 
+            CalculateIntervalsH();
             CalculateIntervalsValues();
         }
 
@@ -61,7 +62,7 @@ namespace Histogram
             }
         }
 
-        public void FillIntervals()
+        private void CalculateIntervalsH()
         {
             foreach(double v in Values)
             {
@@ -69,7 +70,7 @@ namespace Histogram
                 {
                     if(v >= i.MinValue && v < i.MaxValue)
                     {
-                        i.Add(v);
+                        i.H++;
                     }
                 }
             }
