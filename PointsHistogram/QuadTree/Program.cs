@@ -5,8 +5,6 @@ namespace QuadTree
 {
     class MainClass
     {
-        static int Count = 0;
-
         public static int Main(string[] args)
         {
             /*if (args.Length < 2)
@@ -17,12 +15,7 @@ namespace QuadTree
             else
             {*/
 
-            double minX = 394364;
-            double maxX = 394374;
-            double minY = 39150;
-            double maxY = 39160;
-
-            QuadTree quadTree = new QuadTree(minX, minY, maxX, maxY); 
+            QuadTree quadTree = new QuadTree(0, 0, double.MaxValue, double.MaxValue); 
             try
             {
                 // Read file using StreamReader. Reads file line by line    
@@ -54,8 +47,6 @@ namespace QuadTree
             }
 
             DisplayQuadTree(quadTree);
-            Console.WriteLine(Count);
-
 
             return 0;
         }
@@ -85,7 +76,6 @@ namespace QuadTree
         private static void DisplayPoint(Point point)
         {
             Console.WriteLine(point.X + " " + point.Y + ": " + point.I);
-            Count++;
         }
     }
 }
