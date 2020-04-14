@@ -37,6 +37,7 @@
     <Compile Include="Histogram.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="StatisticalSummary.cs" />
+    <Compile Include="SelectionType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuadTree\QuadTree.csproj">
