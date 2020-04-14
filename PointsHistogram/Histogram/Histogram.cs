@@ -162,6 +162,8 @@ namespace Histogram
 
             double kurtosis = nominator / denominator;
 
+            kurtosis = kurtosis - 3;
+
             return kurtosis;
         }
     }

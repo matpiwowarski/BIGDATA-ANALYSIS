@@ -14,27 +14,10 @@ namespace Histogram
             double maxY = 39160;
 
             // create histogram with bin size
-            Histogram histogram = new Histogram(4);
+            Histogram histogram = new Histogram(5);
             // create empty summary
             StatisticalSummary statisticalSummary = new StatisticalSummary();
 
-            // insert data from file into histogram
-
-            histogram.InsertValue(1);
-            histogram.InsertValue(2);
-            histogram.InsertValue(3);
-            histogram.InsertValue(2);
-            histogram.InsertValue(2);
-            histogram.InsertValue(1);
-            histogram.InsertValue(14);
-            histogram.InsertValue(5);
-            histogram.InsertValue(16);
-            histogram.InsertValue(20);
-            histogram.InsertValue(21);
-            histogram.InsertValue(22);
-            histogram.InsertValue(25);
-
-            /*
             try
             {
                 // Read file using StreamReader. Reads file line by line    
@@ -64,8 +47,7 @@ namespace Histogram
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
             }
-            */
-
+            
             // statistics
             histogram.CreateIntervals();
             histogram.MakeSummary(statisticalSummary);
