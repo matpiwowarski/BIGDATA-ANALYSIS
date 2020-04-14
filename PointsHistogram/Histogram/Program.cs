@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using QuadTree;
 
 namespace Histogram
 {
@@ -13,11 +12,13 @@ namespace Histogram
             double maxX = 394374;
             double minY = 39150;
             double maxY = 39160;
-            QuadTree.QuadTree quadTree = new QuadTree.QuadTree(minX, minY, maxX, maxY);
+
+            Histogram histogram = new Histogram(5); // create histogram with bin size
+
             try
             {
                 // Read file using StreamReader. Reads file line by line    
-                using (StreamReader file = new StreamReader("Korte_Vegetation_all.txt")) // (args[0])
+                using (StreamReader file = new StreamReader("Korte_Vegetation_all.txt")) 
                 {
                     string ln;
 
@@ -28,12 +29,12 @@ namespace Histogram
 
                         double x = double.Parse(tokens[0]);
                         double y = double.Parse(tokens[1]);
-                        double z = double.Parse(tokens[2]);
-                        short i = short.Parse(tokens[3]);
 
-                        Point point = new Point(x, y, z, i);
-
-                        quadTree.TryToInsert(point);
+                        if(x >= minX && x <= maxX && y >=minY && y <= maxY)
+                        {
+                            short i = short.Parse(tokens[3]);
+                            histogram.InsertValue(i);
+                        }
                     }
                     file.Close();
                 }
