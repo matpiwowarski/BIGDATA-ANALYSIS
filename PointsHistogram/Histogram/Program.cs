@@ -19,6 +19,7 @@ namespace Histogram
             StatisticalSummary statisticalSummary = new StatisticalSummary();
 
             // insert data from file into histogram
+
             histogram.InsertValue(1);
             histogram.InsertValue(2);
             histogram.InsertValue(3);
