@@ -6,7 +6,7 @@ namespace Histogram
     public class Histogram
     {
         public int BinSize = 0;
-        public int Count = 0;
+        public int PointsCount { get => Values.Count; }
         public double Min = double.MaxValue; 
         public double Max = double.MinValue;
 
@@ -20,8 +20,6 @@ namespace Histogram
 
         public void InsertValue<T>(T value)
         {
-            Count++;
-
             double v = Convert.ToDouble(value);
 
             if (v < Min)
@@ -56,9 +54,9 @@ namespace Histogram
 
         private void CalculateIntervalsValues()
         {
-            for(int k = 0; k < Intervals.Count; k++)
+            foreach(Interval i in Intervals)
             {
-                Intervals[k].Val = Intervals[k].MinValue + BinSize / 2;
+                i.Val = i.MinValue + BinSize / 2;
             }
         }
 
@@ -76,5 +74,33 @@ namespace Histogram
             }
         }
 
+        public void MakeSummary(StatisticalSummary statisticalSummary)
+        {
+
+            statisticalSummary.AverageValue = CalculateAverageValue();
+            statisticalSummary.StandardDeviation = CalculateStandardDeviation();
+            statisticalSummary.Skewness = CalculateSkewness();
+            statisticalSummary.Kurtosis = CalculateKurtosis();
+        }
+
+        private double CalculateKurtosis()
+        {
+            return 0;
+        }
+
+        private double CalculateSkewness()
+        {
+            return 0;
+        }
+
+        private double CalculateStandardDeviation()
+        {
+            return 0;
+        }
+
+        private double CalculateAverageValue()
+        {
+            return 0;
+        }
     }
 }

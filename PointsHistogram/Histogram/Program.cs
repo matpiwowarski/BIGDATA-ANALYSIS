@@ -15,6 +15,7 @@ namespace Histogram
 
             // create histogram
             Histogram histogram = new Histogram(4); // create histogram with bin size
+            StatisticalSummary statisticalSummary = new StatisticalSummary();
 
             histogram.InsertValue(1);
             histogram.InsertValue(2);
@@ -31,7 +32,7 @@ namespace Histogram
             histogram.InsertValue(25);
 
             histogram.CreateIntervals();
-            //histogram.FillIntervals();
+            histogram.MakeSummary(statisticalSummary);
 
             /*
             try
@@ -68,6 +69,7 @@ namespace Histogram
             // statistics
 
             // output
+            statisticalSummary.PrintReport(histogram.PointsCount);
         }
     }
 }
