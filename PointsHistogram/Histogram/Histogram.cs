@@ -49,6 +49,16 @@ namespace Histogram
                 Intervals.Add(new Interval(minIntervalValue, maxIntervalValue));
             }
             while (maxIntervalValue <= Max);
+
+            CalculateIntervalsValues();
+        }
+
+        private void CalculateIntervalsValues()
+        {
+            for(int k = 0; k < Intervals.Count; k++)
+            {
+                Intervals[k].Val = Intervals[k].MinValue + BinSize / 2;
+            }
         }
 
         public void FillIntervals()

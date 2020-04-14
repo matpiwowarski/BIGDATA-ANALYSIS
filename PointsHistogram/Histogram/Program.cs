@@ -31,7 +31,7 @@ namespace Histogram
             histogram.InsertValue(25);
 
             histogram.CreateIntervals();
-            histogram.FillIntervals();
+            //histogram.FillIntervals();
 
             /*
             try

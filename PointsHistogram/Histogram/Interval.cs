@@ -9,6 +9,9 @@ namespace Histogram
         public double MaxValue;
         public List<double> Values = new List<double>();
 
+        public int H { get => Values.Count; }
+        public double Val;
+
         public Interval(double min, double max)
         {
             MinValue = min;
