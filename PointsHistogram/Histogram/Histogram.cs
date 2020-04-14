@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Histogram
 {
     public class Histogram
@@ -7,6 +9,9 @@ namespace Histogram
         public int Count = 0;
         public double Min = double.MaxValue; 
         public double Max = double.MinValue;
+
+        public List<double> Values = new List<double>();
+        public List<Interval> Intervals = new List<Interval>();
 
         public Histogram(int binSize)
         {
@@ -28,6 +33,23 @@ namespace Histogram
             {
                 Max = v;
             }
+
+            Values.Add(v);
         }
+
+        public void CreateIntervals()
+        {
+            double minIntervalValue = Min - BinSize;
+            double maxIntervalValue = Min;
+
+            do
+            {
+                minIntervalValue += BinSize;
+                maxIntervalValue += BinSize;
+                Intervals.Add(new Interval(minIntervalValue, maxIntervalValue));
+            }
+            while (maxIntervalValue <= Max);
+        }
+
     }
 }

@@ -14,7 +14,7 @@ namespace Histogram
             double maxY = 39160;
 
             // create histogram
-            Histogram histogram = new Histogram(5); // create histogram with bin size
+            Histogram histogram = new Histogram(4); // create histogram with bin size
 
             histogram.InsertValue(1);
             histogram.InsertValue(2);
@@ -29,6 +29,8 @@ namespace Histogram
             histogram.InsertValue(21);
             histogram.InsertValue(22);
             histogram.InsertValue(25);
+
+            histogram.CreateIntervals();
 
             /*
             try
