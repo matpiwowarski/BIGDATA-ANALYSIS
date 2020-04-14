@@ -51,5 +51,19 @@ namespace Histogram
             while (maxIntervalValue <= Max);
         }
 
+        public void FillIntervals()
+        {
+            foreach(double v in Values)
+            {
+                foreach(Interval i in Intervals)
+                {
+                    if(v >= i.MinValue && v < i.MaxValue)
+                    {
+                        i.Add(v);
+                    }
+                }
+            }
+        }
+
     }
 }
