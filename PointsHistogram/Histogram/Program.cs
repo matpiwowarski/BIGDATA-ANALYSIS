@@ -81,7 +81,7 @@ namespace Histogram
                 histogram.MakeSummary(statisticalSummary);
 
                 // output
-                statisticalSummary.PrintReport(histogram.PointsCount, NumberOfDataReads);
+                statisticalSummary.PrintReport(histogram.PointsCount, histogram.K, NumberOfDataReads);
                 return 0;
             }
         }
