@@ -8,7 +8,7 @@ namespace LinearRegression
     {
         static void Main(string[] args)
         {
-            string fileName = "poly.txt"; //single.txt // multi.txt // poly.txt
+            string fileName = "single.txt"; //single.txt // multi.txt // poly.txt
             List<double> outputs = new List<double>();
             List<List<double>> columnsWithInputs = new List<List<double>>();
 

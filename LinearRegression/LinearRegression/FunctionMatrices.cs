@@ -10,8 +10,6 @@ namespace LinearRegression
         // X, Y
         public Matrix<double> X;
         public Matrix<double> Y;
-        // mean(X)
-        public double MeanX = 0;
 
         public FunctionMatrices(List<List<double>> columns, List<double> y)
         {
