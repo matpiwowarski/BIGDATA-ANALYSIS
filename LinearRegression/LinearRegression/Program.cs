@@ -8,7 +8,7 @@ namespace LinearRegression
     {
         static void Main(string[] args)
         {
-            string fileName = "single.txt"; //single.txt // multi.txt
+            string fileName = "poly.txt"; //single.txt // multi.txt // poly.txt
             List<double> outputs = new List<double>();
             List<List<double>> columnsWithInputs = new List<List<double>>();
 
@@ -50,11 +50,11 @@ namespace LinearRegression
 
             calculator.CalculateRegression();
 
-            for(int i = 0; i < calculator.NumberOfXVariables; i++)
-            {
-                Console.WriteLine("b" + i + 1 + " : " + calculator.B[i]);
-            }
             Console.WriteLine("c: " + calculator.C);
+            for (int i = 0; i < calculator.NumberOfXVariables; i++)
+            {
+                Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i]);
+            }
             Console.WriteLine("y(400): " + calculator.GetFunctionValue(400));
         }
 

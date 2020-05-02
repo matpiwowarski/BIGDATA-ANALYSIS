@@ -10,10 +10,10 @@ namespace LinearRegression
         // X, Y
         public FunctionMatrices Matrices;
         // centered X
-        public Matrix<double> X { get; set; }
+        public List<Matrix<double>> X = new List<Matrix<double>>();
 
         // mean(X)
-        public double MeanX { get; set; }
+        public List<double> MeanX = new List<double>();
         // b and c of function (ax^2 + bx + c)
         public List<double> B = new List<double>();
 
@@ -36,9 +36,9 @@ namespace LinearRegression
 
         public void CalculateRegression()
         {
-            MeanX = CalculateMeanX();
-            X = GetCenteredX();
-            B.Add(CalculateB(0));
+            CalculateMeanX();
+            GetCenteredX();
+            CalculateB();
             C = CalculateC();
         }
 
@@ -56,36 +56,34 @@ namespace LinearRegression
             return C;
         }
 
-        private double CalculateB(int index)
+        private void CalculateB()
         {
             var Y = Matrices.Y;
-            var matrix = X.Transpose().Multiply(X);
 
-            double determinant = matrix.Determinant();
-            double inversion = 1 / determinant;
+            for(int index = 0; index < NumberOfXVariables; index++)
+            {
+                var matrix = X[index].Transpose().Multiply(X[index]);
 
-            var matrix2 = X.Transpose().Multiply(inversion);
+                double determinant = matrix.Determinant();
+                double inversion = 1 / determinant;
 
-            var b = matrix2.Multiply(Y).Determinant();
+                var matrix2 = X[index].Transpose().Multiply(inversion);
 
-            return b;
+                var b = matrix2.Multiply(Y).Determinant();
+
+                B.Add(b);
+            }
         }
 
-        private double CalculateMeanX()
+        private void CalculateMeanX()
         {
-            double sum = 0;
-            double mean = 0;
-
             Vector<double> columnSums = Matrices.X.ColumnSums();
 
-            foreach(double columnSum in columnSums)
+            for(int i = 0; i < NumberOfXVariables; i++)
             {
-                sum += columnSum;
+                double mean = columnSums[i] / Matrices.X.RowCount;
+                MeanX.Add(mean);
             }
-
-            mean = sum / (Matrices.X.ColumnCount * Matrices.X.RowCount);
-
-            return mean;
         }
 
         public RegressionCalculator(FunctionMatrices matrices, int number)
@@ -94,9 +92,14 @@ namespace LinearRegression
             Matrices = matrices;
         }
 
-        private Matrix<double> GetCenteredX()
+        private void GetCenteredX()
         {
-            return Matrices.X.Subtract(MeanX);
+            for(int i = 0; i < NumberOfXVariables; i++)
+            {
+                Vector<double> column = Matrices.X.Column(i);
+                var subtractedColumn = column.Subtract(MeanX[i]);
+                X.Add(subtractedColumn.ToColumnMatrix());
+            }
         }
     }
 }
