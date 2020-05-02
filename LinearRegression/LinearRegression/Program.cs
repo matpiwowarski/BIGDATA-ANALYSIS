@@ -8,9 +8,11 @@ namespace LinearRegression
     {
         static void Main(string[] args)
         {
-            string fileName = "data.txt"; //single.txt // multi.txt
+            string fileName = "single.txt"; //single.txt // multi.txt
             List<double> outputs = new List<double>();
             List<List<double>> columnsWithInputs = new List<List<double>>();
+
+            int numberOfVariables = 0;
 
             // Read file using StreamReader. Reads file line by line    
             using (StreamReader file = new StreamReader(fileName))
@@ -18,7 +20,7 @@ namespace LinearRegression
                 string ln;
 
                 ln = file.ReadLine();
-                int numberOfVariables = HowManyVariablesInLine(ln);
+                numberOfVariables = HowManyVariablesInLine(ln);
                 CreateColumns(columnsWithInputs, numberOfVariables);
 
                 while ((ln = file.ReadLine()) != null)
@@ -44,12 +46,16 @@ namespace LinearRegression
                 file.Close();
             }
             FunctionMatrices matrices = new FunctionMatrices(columnsWithInputs, outputs);
-            RegressionCalculator calculator = new RegressionCalculator(matrices);
+            RegressionCalculator calculator = new RegressionCalculator(matrices, numberOfVariables - 1);
 
             calculator.CalculateRegression();
 
-            Console.WriteLine(calculator.B);
-            Console.WriteLine(calculator.C);
+            for(int i = 0; i < calculator.NumberOfXVariables; i++)
+            {
+                Console.WriteLine("b" + i + 1 + " : " + calculator.B[i]);
+            }
+            Console.WriteLine("c: " + calculator.C);
+            Console.WriteLine("y(400): " + calculator.GetFunctionValue(400));
         }
 
         private static void CreateColumns(List<List<double>> columnsWithInputs, int numberOfVariables)

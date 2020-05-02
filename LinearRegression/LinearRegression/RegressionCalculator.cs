@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace LinearRegression
 {
     public class RegressionCalculator
     {
+        public int NumberOfXVariables;
         // X, Y
         public FunctionMatrices Matrices;
         // centered X
@@ -13,29 +15,48 @@ namespace LinearRegression
         // mean(X)
         public double MeanX { get; set; }
         // b and c of function (ax^2 + bx + c)
-        public double B { get; set; }
+        public List<double> B = new List<double>();
+
         public double C { get; set; }
 
         // methods
+
+        public double GetFunctionValue(double x)
+        {
+            double y = C;
+
+            for(int i = 0; i < NumberOfXVariables; i++)
+            {
+                y += B[i] * x;
+                x = x * x;
+            }
+
+            return y;
+        }
 
         public void CalculateRegression()
         {
             MeanX = CalculateMeanX();
             X = GetCenteredX();
-            B = CalculateB();
+            B.Add(CalculateB(0));
             C = CalculateC();
         }
 
         private double CalculateC()
         {
             double realValue = Matrices.Y[0, 0];
-            double regressionValue = B * Matrices.X[0, 0];
+            double regressionValue = 0;
+            for (int i = 0; i < NumberOfXVariables; i++)
+            {
+                regressionValue = B[i] * Matrices.X[0, 0];
+            }
+
             double C = realValue - regressionValue;
 
             return C;
         }
 
-        private double CalculateB()
+        private double CalculateB(int index)
         {
             var Y = Matrices.Y;
             var matrix = X.Transpose().Multiply(X);
@@ -67,8 +88,9 @@ namespace LinearRegression
             return mean;
         }
 
-        public RegressionCalculator(FunctionMatrices matrices)
+        public RegressionCalculator(FunctionMatrices matrices, int number)
         {
+            NumberOfXVariables = number;
             Matrices = matrices;
         }
 
