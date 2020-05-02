@@ -37,13 +37,17 @@ namespace LinearRegression
 
         private double CalculateB()
         {
-            double determinant = 0;
-
+            var Y = Matrices.Y;
             var matrix = X.Transpose().Multiply(X);
 
-            determinant = matrix.Determinant();
+            double determinant = matrix.Determinant();
+            double inversion = 1 / determinant;
 
-            return determinant;
+            var matrix2 = X.Transpose().Multiply(inversion);
+
+            var b = matrix2.Multiply(Y).Determinant();
+
+            return b;
         }
 
         private double CalculateMeanX()

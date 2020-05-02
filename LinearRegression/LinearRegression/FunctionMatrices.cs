@@ -9,7 +9,7 @@ namespace LinearRegression
     {
         // X, Y
         public Matrix<double> X;
-        public Vector<double> Y;
+        public Matrix<double> Y;
         // mean(X)
         public double MeanX = 0;
 
@@ -19,7 +19,7 @@ namespace LinearRegression
 
             FillMatrixWithColumns(columns);
 
-            Y = Vector.Build.Dense(y.Count);
+            Y = Matrix<double>.Build.Dense(y.Count, 1);
 
             FillVectorWithValues(y);
         }
@@ -28,7 +28,7 @@ namespace LinearRegression
         {
             for(int i = 0; i < y.Count; i++)
             {
-                Y[i] = y[i];
+                Y[i, 0] = y[i];
             }
         }
 
