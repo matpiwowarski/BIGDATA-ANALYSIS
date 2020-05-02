@@ -13,7 +13,7 @@ namespace LinearRegression
         public List<Matrix<double>> X = new List<Matrix<double>>();
 
         // mean(X)
-        public double MeanX = 0;
+        public List<double> MeanX = new List<double>();
         // b and c of function (ax^2 + bx + c)
         public List<double> B = new List<double>();
 
@@ -92,19 +92,19 @@ namespace LinearRegression
 
                 B.Add(b);
             }
+            
         }
 
         private void CalculateMeanX()
         {
             Vector<double> columnSums = Matrices.X.ColumnSums();
 
-            double sum = 0;
             for(int i = 0; i < NumberOfXVariables; i++)
             {
-                sum += columnSums[i];
+                double sum = columnSums[i];
+                double mean = sum / Matrices.X.RowCount;
+                MeanX.Add(mean);
             }
-
-            MeanX = sum / (Matrices.X.RowCount * Matrices.X.ColumnCount);
         }
 
         public RegressionCalculator(FunctionMatrices matrices, int number)
@@ -118,7 +118,7 @@ namespace LinearRegression
             for(int i = 0; i < NumberOfXVariables; i++)
             {
                 Vector<double> column = Matrices.X.Column(i);
-                var subtractedColumn = column.Subtract(MeanX);
+                var subtractedColumn = column.Subtract(MeanX[i]);
                 X.Add(subtractedColumn.ToColumnMatrix());
             }
         }
