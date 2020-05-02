@@ -46,7 +46,10 @@ namespace LinearRegression
             FunctionMatrices matrices = new FunctionMatrices(columnsWithInputs, outputs);
             RegressionCalculator calculator = new RegressionCalculator(matrices);
 
+            calculator.CalculateRegression();
+
             Console.WriteLine(calculator.B);
+            Console.WriteLine(calculator.C);
         }
 
         private static void CreateColumns(List<List<double>> columnsWithInputs, int numberOfVariables)

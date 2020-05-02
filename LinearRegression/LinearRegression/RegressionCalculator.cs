@@ -7,32 +7,32 @@ namespace LinearRegression
     {
         // X, Y
         public FunctionMatrices Matrices;
-        // centered
+        // centered X
         public Matrix<double> X { get; set; }
 
         // mean(X)
-        public double MeanX
+        public double MeanX { get; set; }
+        // b and c of function (ax^2 + bx + c)
+        public double B { get; set; }
+        public double C { get; set; }
+
+        // methods
+
+        public void CalculateRegression()
         {
-            get
-            {
-                return CalculateMeanX();
-            }
-            set
-            {
-                MeanX = value;
-            }
+            MeanX = CalculateMeanX();
+            X = GetCenteredX();
+            B = CalculateB();
+            C = CalculateC();
         }
-        // b of function (ax^2 + bx + c)
-        public double B
+
+        private double CalculateC()
         {
-            get
-            {
-                return CalculateB();
-            }
-            set
-            {
-                B = value;
-            }
+            double realValue = Matrices.Y[0, 0];
+            double regressionValue = B * Matrices.X[0, 0];
+            double C = realValue - regressionValue;
+
+            return C;
         }
 
         private double CalculateB()
@@ -70,12 +70,11 @@ namespace LinearRegression
         public RegressionCalculator(FunctionMatrices matrices)
         {
             Matrices = matrices;
-            GetCenteredX();
         }
 
-        private void GetCenteredX()
+        private Matrix<double> GetCenteredX()
         {
-            X = Matrices.X.Subtract(MeanX);
+            return Matrices.X.Subtract(MeanX);
         }
     }
 }
