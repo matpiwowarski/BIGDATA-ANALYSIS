@@ -36,15 +36,15 @@ namespace LinearRegression
             {
                 CalculatePolynomialMeanX();
                 GetPolynomialCenteredX();
-                CalculateB();
             }
             else
             {
                 CalculateMeanX();
                 GetCenteredX();
-                CalculateB();
-                C = CalculateC();
             }
+
+            CalculateB();
+            C = CalculateC();
         }
 
         private void CalculatePolynomialMeanX()
@@ -120,9 +120,20 @@ namespace LinearRegression
                 realValue = Matrices.Y[j, 0];
 
                 regressionValue = 0;
-                for (int i = 0; i < NumberOfXVariables; i++)
+
+                if(IsFunctionPolynomial)
                 {
-                    regressionValue += B[i, 0] * Matrices.X[j, i];
+                    for (int i = 0; i < FunctionDegree; i++)
+                    {
+                        regressionValue += B[i, 0] * Matrices.X[j, i];
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < NumberOfXVariables; i++)
+                    {
+                        regressionValue += B[i, 0] * Matrices.X[j, i];
+                    }
                 }
 
                 double C = realValue - regressionValue;
@@ -153,7 +164,7 @@ namespace LinearRegression
                 int pow = 1;
                 for (int i = 0; i < degree; i++)
                 {
-                    y += B[i, 0] * Math.Pow(x[i], pow);
+                    y += B[i, 0] * Math.Pow(x[0], pow);
                 }
             }
             else
