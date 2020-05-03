@@ -14,8 +14,7 @@ namespace LinearRegression
             // poly.txt:   C = 61005.0; B = { 5.6097; -0.031; 2.0968; -1.099; } (works)
             string filePath = AskUserForFileName();
             bool isPolynomial;
-            int degree = 1;
-            /////////
+
             List<double> Y = new List<double>();
             List<List<double>> XColumns = new List<List<double>>();
 
@@ -30,12 +29,24 @@ namespace LinearRegression
                 isPolynomial = true;
             }
 
-            FunctionMatrices matrices = new FunctionMatrices(XColumns, Y, isPolynomial, degree);
-            RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial, degree);
+            int degree = 1;
+            RegressionCalculator calculator;
+            Results results = new Results();
+            do
+            {
+                FunctionMatrices matrices = new FunctionMatrices(XColumns, Y, isPolynomial, degree);
+                calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial, degree);
+                calculator.CalculateRegression();
 
-            calculator.CalculateRegression();
+                var lastParameter = calculator.B[calculator.B.RowCount - 1, 0];
+                if (lastParameter < 0.01 && lastParameter > -0.01)
+                    break;
 
-            Results results = new Results(calculator.B, calculator.C);
+                results = new Results(calculator.B, calculator.C);
+                degree++;
+            }
+            while (isPolynomial);
+            degree--;
 
             results.DisplayRegressionInfo(isPolynomial, degree, calculator);
         }

@@ -10,6 +10,8 @@ namespace LinearRegression
         public double C { get; set; }
         public List<double> B = new List<double>();
 
+        public Results() { }
+
         public Results(Matrix<double> B, double C)
         {
             for(int i = 0; i < B.RowCount; i++)
