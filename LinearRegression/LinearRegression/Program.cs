@@ -14,7 +14,7 @@ namespace LinearRegression
             // poly.txt
             string filePath = "poly.txt"; //AskUserForFileName();
             bool isPolynomial = true;
-            int degree = 2;
+            int degree = 4;
 
             List<double> Y = new List<double>();
             List<List<double>> XColumns = new List<List<double>>();
@@ -22,7 +22,7 @@ namespace LinearRegression
             ReadDataIntoLists(filePath, XColumns, Y);
 
             FunctionMatrices matrices = new FunctionMatrices(XColumns, Y, isPolynomial, degree);
-            RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial);
+            RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial, degree);
 
             calculator.CalculateRegression();
             DisplayRegressionInfo(calculator, isPolynomial, degree);

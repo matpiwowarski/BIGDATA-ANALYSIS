@@ -6,7 +6,8 @@ namespace LinearRegression
 {
     public class RegressionCalculator
     {
-        public bool IsFunctionPolynomial = false;
+        public bool IsFunctionPolynomial;
+        public int FunctionDegree = 0;
 
         public int NumberOfXVariables;
         // X, Y
@@ -21,22 +22,21 @@ namespace LinearRegression
 
         public double C { get; set; }
 
-        public RegressionCalculator(FunctionMatrices matrices, int number, bool isPolynomial)
+        public RegressionCalculator(FunctionMatrices matrices, int number, bool isPolynomial, int degree)
         {
             NumberOfXVariables = number;
             Matrices = matrices;
-
-            if(NumberOfXVariables > 1)
-            {
-                IsFunctionPolynomial = isPolynomial;
-            }
+            IsFunctionPolynomial = isPolynomial;
+            FunctionDegree = degree;
         }
 
         public void CalculateRegression()
         {
             if(IsFunctionPolynomial)
             {
-
+                CalculatePolynomialMeanX();
+                GetPolynomialCenteredX();
+                CalculateB();
             }
             else
             {
@@ -44,6 +44,18 @@ namespace LinearRegression
                 GetCenteredX();
                 CalculateB();
                 C = CalculateC();
+            }
+        }
+
+        private void CalculatePolynomialMeanX()
+        {
+            Vector<double> columnSums = Matrices.X.ColumnSums();
+
+            for (int i = 0; i < FunctionDegree; i++)
+            {
+                double sum = columnSums[i];
+                double mean = sum / Matrices.X.RowCount;
+                MeanX.Add(mean);
             }
         }
 
@@ -56,6 +68,20 @@ namespace LinearRegression
                 double sum = columnSums[i];
                 double mean = sum / Matrices.X.RowCount;
                 MeanX.Add(mean);
+            }
+        }
+
+        private void GetPolynomialCenteredX()
+        {
+            X = Matrix<double>.Build.Dense(Matrices.X.RowCount, Matrices.X.ColumnCount);
+            Matrices.X.CopyTo(X);
+
+            for (int i = 0; i < FunctionDegree; i++)
+            {
+                for (int j = 0; j < X.RowCount; j++)
+                {
+                    X[j, i] = X[j, i] - MeanX[i];
+                }
             }
         }
 
