@@ -15,7 +15,7 @@ namespace LinearRegression
         // mean(X)
         public List<double> MeanX = new List<double>();
         // b and c of function (ax^2 + bx + c)
-        public List<double> B = new List<double>();
+        public Matrix<double> B;
 
         public double C { get; set; }
 
@@ -25,11 +25,7 @@ namespace LinearRegression
         {
             double y = C;
 
-            for(int i = 0; i < NumberOfXVariables; i++)
-            {
-                y += B[i] * x;
-                x = x * x;
-            }
+            y += B[0,0] * x;
 
             return y;
         }
@@ -55,7 +51,7 @@ namespace LinearRegression
 
                     for (int i = 0; i < NumberOfXVariables; i++)
                     {
-                        regressionValue = B[i] * Matrices.X[j, i];
+                        regressionValue = B[i, 0] * Matrices.X[j, i];
                         double C = realValue - regressionValue;
                         differences.Add(C);
                     }
@@ -81,20 +77,10 @@ namespace LinearRegression
         {
             var Y = Matrices.Y;
 
-            for(int index = 0; index < NumberOfXVariables; index++)
-            {
-                var matrix = X.Transpose().Multiply(X);
+            var left = X.Transpose().Multiply(X).Inverse();
+            var right = X.Transpose().Multiply(Y);
 
-                double determinant = matrix.Determinant();
-                double inversion = 1 / determinant;
-
-                var matrix2 = X.Transpose().Multiply(inversion);
-
-                var b = matrix2.Multiply(Y).Determinant();
-
-                B.Add(b);
-            }
-            
+            B = left.Multiply(right);
         }
 
         private void CalculateMeanX()
