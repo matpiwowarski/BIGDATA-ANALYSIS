@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace LinearRegression
 {
@@ -10,7 +11,7 @@ namespace LinearRegression
         {
             //single.txt: 7.1594; 3.1000; 1247.2; (works)
 
-            string fileName = "multi.txt";  // multi.txt // poly.txt
+            string fileName = "single.txt";  // multi.txt // poly.txt
             List<double> outputs = new List<double>();
             List<List<double>> columnsWithInputs = new List<List<double>>();
 
@@ -51,14 +52,61 @@ namespace LinearRegression
             RegressionCalculator calculator = new RegressionCalculator(matrices, numberOfVariables - 1);
 
             calculator.CalculateRegression();
+            DisplayRegressionInfo(calculator);
+        }
 
+        private static void DisplayRegressionInfo(RegressionCalculator calculator)
+        {
             Console.WriteLine("c: " + calculator.C);
             for (int i = 0; i < calculator.NumberOfXVariables; i++)
             {
                 Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i, 0]);
             }
-            Console.WriteLine("y(400): " + calculator.GetFunctionValue(400));
+
+            bool askForFunctionValue = true;
+
+            while(askForFunctionValue)
+            {
+                Console.WriteLine("\nWould you like to know the value of regression function for your parameters?\n (Y/N)");
+                string input = Console.ReadLine();
+                input = input.ToUpper();
+
+                if(input == "Y")
+                {
+                    Console.Clear();
+                    AskUserForFunctionValue(calculator);
+                }
+                else
+                {
+                    askForFunctionValue = false;
+                }
+            }
         }
+
+        private static void AskUserForFunctionValue(RegressionCalculator calculator)
+        {
+            List<double> parameters = new List<double>();
+
+            for(int i = 0; i < calculator.X.ColumnCount; i++)
+            {
+                Console.WriteLine("Put value of X" + (i + 1));
+                double value = Convert.ToDouble(Console.ReadLine());
+                parameters.Add(value);
+            }
+
+            // string with parameters
+            StringBuilder builder = new StringBuilder();
+            builder.Append("y( ");
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                builder.Append(parameters[i]);
+                builder.Append(" ");
+            }
+            builder.Append(") = ");
+
+            Console.WriteLine(builder.ToString() + calculator.GetFunctionValue(parameters));
+        }
+
 
         private static void CreateColumns(List<List<double>> columnsWithInputs, int numberOfVariables)
         {

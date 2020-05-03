@@ -21,11 +21,13 @@ namespace LinearRegression
 
         // methods
 
-        public double GetFunctionValue(double x)
+        public double GetFunctionValue(List<double> x)
         {
             double y = C;
-
-            y += B[0,0] * x;
+            for (int i = 0; i < x.Count; i++)
+            {
+                y += B[i, 0] * x[i];
+            }
 
             return y;
         }
