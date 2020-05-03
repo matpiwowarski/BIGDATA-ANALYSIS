@@ -13,58 +13,31 @@ namespace LinearRegression
             // multi.txt:  C = 1.0441;  B = { 0.1000; 11.100; 5.2001; 4.4000; } (works) 
             // poly.txt:   C = 61005.0; B = { 5.6097; -0.031; 2.0968; -1.099; } (works)
             string filePath = AskUserForFileName();
-            /// NEED TO BE IMPLEMENTED
-            bool isPolynomial = false;
-            int degree = 4;
+            bool isPolynomial;
+            int degree = 1;
             /////////
             List<double> Y = new List<double>();
             List<List<double>> XColumns = new List<List<double>>();
 
             ReadDataIntoLists(filePath, XColumns, Y);
 
+            if(XColumns.Count > 1)
+            {
+                isPolynomial = false;
+            }
+            else
+            {
+                isPolynomial = true;
+            }
+
             FunctionMatrices matrices = new FunctionMatrices(XColumns, Y, isPolynomial, degree);
             RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial, degree);
 
             calculator.CalculateRegression();
-            DisplayRegressionInfo(calculator, isPolynomial, degree);
-        }
 
-        private static void DisplayRegressionInfo(RegressionCalculator calculator, bool isPolynomial, int degree)
-        {
-            Console.WriteLine("c: " + calculator.C);
-            if(isPolynomial)
-            {
-                for (int i = 0; i < degree; i++)
-                {
-                    Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i, 0]);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < calculator.NumberOfXVariables; i++)
-                {
-                    Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i, 0]);
-                }
-            }
+            Results results = new Results(calculator.B, calculator.C);
 
-            bool askForFunctionValue = true;
-
-            while(askForFunctionValue)
-            {
-                Console.WriteLine("\nWould you like to know the value of regression function for your parameters?\n(Y/N)");
-                string input = Console.ReadLine();
-                input = input.ToUpper();
-
-                if(input == "Y")
-                {
-                    Console.Clear();
-                    AskUserForFunctionValue(calculator, isPolynomial, degree);
-                }
-                else
-                {
-                    askForFunctionValue = false;
-                }
-            }
+            results.DisplayRegressionInfo(isPolynomial, degree, calculator);
         }
 
         private static void ReadDataIntoLists(string filePath, List<List<double>> XColumns, List<double> Y)
@@ -110,40 +83,6 @@ namespace LinearRegression
             string filePath = Console.ReadLine();
             return filePath;
         }
-
-        private static void AskUserForFunctionValue(RegressionCalculator calculator, bool isPolynomial, int degree)
-        {
-            List<double> parameters = new List<double>();
-
-            if (isPolynomial)
-            {
-                Console.WriteLine("Put value of X");
-                double value = Convert.ToDouble(Console.ReadLine().Replace(".", ","));
-                parameters.Add(value);
-            }
-            else
-            {
-                for (int i = 0; i < calculator.X.ColumnCount; i++)
-                {
-                    Console.WriteLine("Put value of X" + (i + 1));
-                    double value = Convert.ToDouble(Console.ReadLine().Replace(".", ","));
-                    parameters.Add(value);
-                }
-            }
-
-            // string with parameters
-            StringBuilder builder = new StringBuilder();
-            builder.Append("y( ");
-            for (int i = 0; i < parameters.Count; i++)
-            {
-                builder.Append(parameters[i]);
-                builder.Append(" ");
-            }
-            builder.Append(") = ");
-
-            Console.WriteLine(builder.ToString() + calculator.GetFunctionValue(parameters, isPolynomial, degree));
-        }
-
 
         private static void CreateColumns(List<List<double>> columnsWithInputs, int numberOfVariables)
         {
