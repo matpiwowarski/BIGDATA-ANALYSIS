@@ -25,15 +25,25 @@ namespace LinearRegression
             RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial);
 
             calculator.CalculateRegression();
-            DisplayRegressionInfo(calculator);
+            DisplayRegressionInfo(calculator, isPolynomial, degree);
         }
 
-        private static void DisplayRegressionInfo(RegressionCalculator calculator)
+        private static void DisplayRegressionInfo(RegressionCalculator calculator, bool isPolynomial, int degree)
         {
             Console.WriteLine("c: " + calculator.C);
-            for (int i = 0; i < calculator.NumberOfXVariables; i++)
+            if(isPolynomial)
             {
-                Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i, 0]);
+                for (int i = 0; i < degree; i++)
+                {
+                    Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i, 0]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < calculator.NumberOfXVariables; i++)
+                {
+                    Console.WriteLine("b" + (i + 1) + " : " + calculator.B[i, 0]);
+                }
             }
 
             bool askForFunctionValue = true;
@@ -47,7 +57,7 @@ namespace LinearRegression
                 if(input == "Y")
                 {
                     Console.Clear();
-                    AskUserForFunctionValue(calculator);
+                    AskUserForFunctionValue(calculator, isPolynomial, degree);
                 }
                 else
                 {
@@ -100,15 +110,24 @@ namespace LinearRegression
             return filePath;
         }
 
-        private static void AskUserForFunctionValue(RegressionCalculator calculator)
+        private static void AskUserForFunctionValue(RegressionCalculator calculator, bool isPolynomial, int degree)
         {
             List<double> parameters = new List<double>();
 
-            for(int i = 0; i < calculator.X.ColumnCount; i++)
+            if (isPolynomial)
             {
-                Console.WriteLine("Put value of X" + (i + 1));
-                double value = Convert.ToDouble(Console.ReadLine().Replace(".",","));
+                Console.WriteLine("Put value of X");
+                double value = Convert.ToDouble(Console.ReadLine().Replace(".", ","));
                 parameters.Add(value);
+            }
+            else
+            {
+                for (int i = 0; i < calculator.X.ColumnCount; i++)
+                {
+                    Console.WriteLine("Put value of X" + (i + 1));
+                    double value = Convert.ToDouble(Console.ReadLine().Replace(".", ","));
+                    parameters.Add(value);
+                }
             }
 
             // string with parameters
@@ -121,7 +140,7 @@ namespace LinearRegression
             }
             builder.Append(") = ");
 
-            Console.WriteLine(builder.ToString() + calculator.GetFunctionValue(parameters));
+            Console.WriteLine(builder.ToString() + calculator.GetFunctionValue(parameters, isPolynomial, degree));
         }
 
 

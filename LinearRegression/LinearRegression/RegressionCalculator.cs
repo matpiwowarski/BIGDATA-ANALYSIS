@@ -40,13 +40,11 @@ namespace LinearRegression
             }
             else
             {
-
+                CalculateMeanX();
+                GetCenteredX();
+                CalculateB();
+                C = CalculateC();
             }
-
-            CalculateMeanX();
-            GetCenteredX();
-            CalculateB();
-            C = CalculateC();
         }
 
         private void CalculateMeanX()
@@ -121,12 +119,23 @@ namespace LinearRegression
             return sum;
         }
 
-        public double GetFunctionValue(List<double> x)
+        public double GetFunctionValue(List<double> x, bool isPolynomial, int degree)
         {
             double y = C;
-            for (int i = 0; i < x.Count; i++)
+            if(isPolynomial)
             {
-                y += B[i, 0] * x[i];
+                int pow = 1;
+                for (int i = 0; i < degree; i++)
+                {
+                    y += B[i, 0] * Math.Pow(x[i], pow);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < x.Count; i++)
+                {
+                    y += B[i, 0] * x[i];
+                }
             }
 
             return y;
