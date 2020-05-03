@@ -21,26 +21,28 @@ namespace LinearRegression
 
         public double C { get; set; }
 
-        public RegressionCalculator(FunctionMatrices matrices, int number)
+        public RegressionCalculator(FunctionMatrices matrices, int number, bool isPolynomial)
         {
             NumberOfXVariables = number;
             Matrices = matrices;
 
             if(NumberOfXVariables > 1)
             {
-                IsFunctionPolynomial = CheckIfFunctionIsPolynomial(matrices);
+                IsFunctionPolynomial = isPolynomial;
             }
-        }
-
-        // methods
-
-        private bool CheckIfFunctionIsPolynomial(FunctionMatrices matrices)
-        {
-            return false;
         }
 
         public void CalculateRegression()
         {
+            if(IsFunctionPolynomial)
+            {
+
+            }
+            else
+            {
+
+            }
+
             CalculateMeanX();
             GetCenteredX();
             CalculateB();

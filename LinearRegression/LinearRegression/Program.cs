@@ -12,15 +12,17 @@ namespace LinearRegression
             // single.txt: C = 7.1594; B = { 3.1000; } Y(400) = 1247.2; (works)
             // multi.txt:  C = 1.0441; B = { 0.1000; 11.100; 5.2001; 4.4000; } (works) 
             // poly.txt
-            string filePath = "shortmulti.txt";//AskUserForFileName();
+            string filePath = "poly.txt"; //AskUserForFileName();
+            bool isPolynomial = true;
+            int degree = 2;
 
             List<double> Y = new List<double>();
             List<List<double>> XColumns = new List<List<double>>();
 
             ReadDataIntoLists(filePath, XColumns, Y);
 
-            FunctionMatrices matrices = new FunctionMatrices(XColumns, Y);
-            RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count);
+            FunctionMatrices matrices = new FunctionMatrices(XColumns, Y, isPolynomial, degree);
+            RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count, isPolynomial);
 
             calculator.CalculateRegression();
             DisplayRegressionInfo(calculator);

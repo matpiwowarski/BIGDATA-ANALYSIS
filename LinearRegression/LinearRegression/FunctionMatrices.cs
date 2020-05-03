@@ -11,11 +11,18 @@ namespace LinearRegression
         public Matrix<double> X;
         public Matrix<double> Y;
 
-        public FunctionMatrices(List<List<double>> columns, List<double> y)
+        public FunctionMatrices(List<List<double>> columns, List<double> y, bool isPolynomial, int degree)
         {
-            X = Matrix<double>.Build.Dense(y.Count, columns.Count);
-
-            FillMatrixWithColumns(columns);
+            if(isPolynomial)
+            {
+                X = Matrix<double>.Build.Dense(y.Count, degree);
+                FillMatrixWithColumns(columns[0], degree);
+            }
+            else
+            {
+                X = Matrix<double>.Build.Dense(y.Count, columns.Count);
+                FillMatrixWithColumns(columns);
+            }
 
             Y = Matrix<double>.Build.Dense(y.Count, 1);
 
@@ -40,6 +47,21 @@ namespace LinearRegression
                 {
                     X[j, i] = columns[i][j];
                 }
+            }
+        }
+
+        private void FillMatrixWithColumns(List<double> column, int degree)
+        {
+            int pow = 1;
+            // for each column
+            for (int i = 0; i < degree; i++)
+            {
+                // for each row in column
+                for (int j = 0; j < column.Count; j++)
+                {
+                    X[j, i] = Math.Pow(column[j], pow);
+                }
+                pow++;
             }
         }
 
