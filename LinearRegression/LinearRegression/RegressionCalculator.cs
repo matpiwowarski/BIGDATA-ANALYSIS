@@ -6,6 +6,8 @@ namespace LinearRegression
 {
     public class RegressionCalculator
     {
+        public bool IsFunctionPolynomial = false;
+
         public int NumberOfXVariables;
         // X, Y
         public FunctionMatrices Matrices;
@@ -19,17 +21,24 @@ namespace LinearRegression
 
         public double C { get; set; }
 
+        public RegressionCalculator(FunctionMatrices matrices, int number)
+        {
+            NumberOfXVariables = number;
+            Matrices = matrices;
+
+            IsFunctionPolynomial = CheckIfFunctionIsPolynomial(matrices);
+        }
+
         // methods
 
-        public double GetFunctionValue(List<double> x)
+        private bool CheckIfFunctionIsPolynomial(FunctionMatrices matrices)
         {
-            double y = C;
-            for (int i = 0; i < x.Count; i++)
+            if(NumberOfXVariables > 1)
             {
-                y += B[i, 0] * x[i];
+                return false;
             }
 
-            return y;
+            return true;
         }
 
         public void CalculateRegression()
@@ -38,6 +47,42 @@ namespace LinearRegression
             GetCenteredX();
             CalculateB();
             C = CalculateC();
+        }
+
+        private void CalculateMeanX()
+        {
+            Vector<double> columnSums = Matrices.X.ColumnSums();
+
+            for (int i = 0; i < NumberOfXVariables; i++)
+            {
+                double sum = columnSums[i];
+                double mean = sum / Matrices.X.RowCount;
+                MeanX.Add(mean);
+            }
+        }
+
+        private void GetCenteredX()
+        {
+            X = Matrix<double>.Build.Dense(Matrices.X.RowCount, Matrices.X.ColumnCount);
+            Matrices.X.CopyTo(X);
+
+            for (int i = 0; i < NumberOfXVariables; i++)
+            {
+                for (int j = 0; j < X.RowCount; j++)
+                {
+                    X[j, i] = X[j, i] - MeanX[i];
+                }
+            }
+        }
+
+        private void CalculateB()
+        {
+            var Y = Matrices.Y;
+
+            var left = X.Transpose().Multiply(X).Inverse();
+            var right = X.Transpose().Multiply(Y);
+
+            B = left.Multiply(right);
         }
 
         private double CalculateC()
@@ -76,46 +121,15 @@ namespace LinearRegression
             return sum;
         }
 
-        private void CalculateB()
+        public double GetFunctionValue(List<double> x)
         {
-            var Y = Matrices.Y;
-
-            var left = X.Transpose().Multiply(X).Inverse();
-            var right = X.Transpose().Multiply(Y);
-
-            B = left.Multiply(right);
-        }
-
-        private void CalculateMeanX()
-        {
-            Vector<double> columnSums = Matrices.X.ColumnSums();
-
-            for(int i = 0; i < NumberOfXVariables; i++)
+            double y = C;
+            for (int i = 0; i < x.Count; i++)
             {
-                double sum = columnSums[i];
-                double mean = sum / Matrices.X.RowCount;
-                MeanX.Add(mean);
+                y += B[i, 0] * x[i];
             }
-        }
 
-        public RegressionCalculator(FunctionMatrices matrices, int number)
-        {
-            NumberOfXVariables = number;
-            Matrices = matrices;
-        }
-
-        private void GetCenteredX()
-        {
-            X = Matrix<double>.Build.Dense(Matrices.X.RowCount, Matrices.X.ColumnCount);
-            Matrices.X.CopyTo(X);
-
-            for(int i = 0; i < NumberOfXVariables; i++)
-            {
-                for(int j = 0; j < X.RowCount; j++)
-                {
-                    X[j, i] = X[j, i] - MeanX[i];
-                }
-            }
+            return y;
         }
     }
 }
