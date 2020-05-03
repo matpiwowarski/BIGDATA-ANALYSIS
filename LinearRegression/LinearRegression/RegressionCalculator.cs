@@ -46,19 +46,20 @@ namespace LinearRegression
             double regressionValue = 0;
             List<double> differences = new List<double>();
 
+            for (int j = 0; j < Matrices.Y.RowCount; j++)
+            {
+                realValue = Matrices.Y[j, 0];
 
-                for(int j = 0; j < Matrices.Y.RowCount; j++)
+                regressionValue = 0;
+                for (int i = 0; i < NumberOfXVariables; i++)
                 {
-                    realValue = Matrices.Y[j, 0];
-
-                    for (int i = 0; i < NumberOfXVariables; i++)
-                    {
-                        regressionValue = B[i, 0] * Matrices.X[j, i];
-                        double C = realValue - regressionValue;
-                        differences.Add(C);
-                    }
+                    regressionValue += B[i, 0] * Matrices.X[j, i];
                 }
-            
+
+                double C = realValue - regressionValue;
+                differences.Add(C);
+            }
+
             double mean = GetSumOfDoubleList(differences) / differences.Count;
 
             return mean;
