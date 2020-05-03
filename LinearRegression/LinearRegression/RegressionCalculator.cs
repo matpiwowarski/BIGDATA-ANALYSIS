@@ -10,7 +10,7 @@ namespace LinearRegression
         // X, Y
         public FunctionMatrices Matrices;
         // centered X
-        public List<Matrix<double>> X = new List<Matrix<double>>();
+        public Matrix<double> X;
 
         // mean(X)
         public List<double> MeanX = new List<double>();
@@ -48,17 +48,19 @@ namespace LinearRegression
             double regressionValue = 0;
             List<double> differences = new List<double>();
 
-            for (int i = 0; i < NumberOfXVariables; i++)
-            {
+
                 for(int j = 0; j < Matrices.Y.RowCount; j++)
                 {
                     realValue = Matrices.Y[j, 0];
-                    regressionValue = B[i] * Matrices.X[j, i];
-                    double C = realValue - regressionValue;
-                    differences.Add(C);
-                }
-            }
 
+                    for (int i = 0; i < NumberOfXVariables; i++)
+                    {
+                        regressionValue = B[i] * Matrices.X[j, i];
+                        double C = realValue - regressionValue;
+                        differences.Add(C);
+                    }
+                }
+            
             double mean = GetSumOfDoubleList(differences) / differences.Count;
 
             return mean;
@@ -81,12 +83,12 @@ namespace LinearRegression
 
             for(int index = 0; index < NumberOfXVariables; index++)
             {
-                var matrix = X[index].Transpose().Multiply(X[index]);
+                var matrix = X.Transpose().Multiply(X);
 
                 double determinant = matrix.Determinant();
                 double inversion = 1 / determinant;
 
-                var matrix2 = X[index].Transpose().Multiply(inversion);
+                var matrix2 = X.Transpose().Multiply(inversion);
 
                 var b = matrix2.Multiply(Y).Determinant();
 
@@ -115,11 +117,15 @@ namespace LinearRegression
 
         private void GetCenteredX()
         {
+            X = Matrix<double>.Build.Dense(Matrices.X.RowCount, Matrices.X.ColumnCount);
+            Matrices.X.CopyTo(X);
+
             for(int i = 0; i < NumberOfXVariables; i++)
             {
-                Vector<double> column = Matrices.X.Column(i);
-                var subtractedColumn = column.Subtract(MeanX[i]);
-                X.Add(subtractedColumn.ToColumnMatrix());
+                for(int j = 0; j < X.RowCount; j++)
+                {
+                    X[j, i] = X[j, i] - MeanX[i];
+                }
             }
         }
     }
