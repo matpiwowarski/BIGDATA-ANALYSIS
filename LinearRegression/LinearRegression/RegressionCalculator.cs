@@ -26,19 +26,17 @@ namespace LinearRegression
             NumberOfXVariables = number;
             Matrices = matrices;
 
-            IsFunctionPolynomial = CheckIfFunctionIsPolynomial(matrices);
+            if(NumberOfXVariables > 1)
+            {
+                IsFunctionPolynomial = CheckIfFunctionIsPolynomial(matrices);
+            }
         }
 
         // methods
 
         private bool CheckIfFunctionIsPolynomial(FunctionMatrices matrices)
         {
-            if(NumberOfXVariables > 1)
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         public void CalculateRegression()

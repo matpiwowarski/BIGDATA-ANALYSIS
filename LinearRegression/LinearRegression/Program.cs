@@ -12,7 +12,7 @@ namespace LinearRegression
             // single.txt: C = 7.1594; B = { 3.1000; } Y(400) = 1247.2; (works)
             // multi.txt:  C = 1.0441; B = { 0.1000; 11.100; 5.2001; 4.4000; } (works) 
             // poly.txt
-            string filePath = AskUserForFileName();
+            string filePath = "shortmulti.txt";//AskUserForFileName();
 
             List<double> Y = new List<double>();
             List<List<double>> XColumns = new List<List<double>>();
@@ -105,7 +105,7 @@ namespace LinearRegression
             for(int i = 0; i < calculator.X.ColumnCount; i++)
             {
                 Console.WriteLine("Put value of X" + (i + 1));
-                double value = Convert.ToDouble(Console.ReadLine());
+                double value = Convert.ToDouble(Console.ReadLine().Replace(".",","));
                 parameters.Add(value);
             }
 
