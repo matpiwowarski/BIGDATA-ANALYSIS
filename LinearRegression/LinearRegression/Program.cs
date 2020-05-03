@@ -9,47 +9,18 @@ namespace LinearRegression
     {
         static void Main(string[] args)
         {
-            //single.txt: 7.1594; 3.1000; 1247.2; (works)
+            // single.txt: C = 7.1594; B = { 3.1000; } Y(400) = 1247.2; (works)
+            // multi.txt:  C = 1.0441; B = { 0.1000; 11.100; 5.2001; 4.4000; } (works) 
+            // poly.txt
+            string filePath = AskUserForFileName();
 
-            string fileName = "single.txt";  // multi.txt // poly.txt
-            List<double> outputs = new List<double>();
-            List<List<double>> columnsWithInputs = new List<List<double>>();
+            List<double> Y = new List<double>();
+            List<List<double>> XColumns = new List<List<double>>();
 
-            int numberOfVariables = 0;
+            ReadDataIntoLists(filePath, XColumns, Y);
 
-            // Read file using StreamReader. Reads file line by line    
-            using (StreamReader file = new StreamReader(fileName))
-            {
-                string ln;
-
-                ln = file.ReadLine();
-                numberOfVariables = HowManyVariablesInLine(ln);
-                CreateColumns(columnsWithInputs, numberOfVariables);
-
-                while ((ln = file.ReadLine()) != null)
-                {
-                    ln = ln.Replace(".", ",");
-                    string[] tokens = ln.Split(' ');
-
-                    for(int i = 0; i < numberOfVariables; i++)
-                    {
-                        if (i + 1 == numberOfVariables) // save output
-                        {
-                            double value = double.Parse(tokens[i]);
-                            outputs.Add(value);
-                        }
-                        else // save input
-                        {
-                            double value = double.Parse(tokens[i]);
-                            columnsWithInputs[i].Add(value);
-                        }
-                    }
-
-                }
-                file.Close();
-            }
-            FunctionMatrices matrices = new FunctionMatrices(columnsWithInputs, outputs);
-            RegressionCalculator calculator = new RegressionCalculator(matrices, numberOfVariables - 1);
+            FunctionMatrices matrices = new FunctionMatrices(XColumns, Y);
+            RegressionCalculator calculator = new RegressionCalculator(matrices, XColumns.Count);
 
             calculator.CalculateRegression();
             DisplayRegressionInfo(calculator);
@@ -67,7 +38,7 @@ namespace LinearRegression
 
             while(askForFunctionValue)
             {
-                Console.WriteLine("\nWould you like to know the value of regression function for your parameters?\n (Y/N)");
+                Console.WriteLine("\nWould you like to know the value of regression function for your parameters?\n(Y/N)");
                 string input = Console.ReadLine();
                 input = input.ToUpper();
 
@@ -81,6 +52,50 @@ namespace LinearRegression
                     askForFunctionValue = false;
                 }
             }
+        }
+
+        private static void ReadDataIntoLists(string filePath, List<List<double>> XColumns, List<double> Y)
+        {
+            int numberOfVariables = 0;
+
+            // Read file using StreamReader. Reads file line by line    
+            using (StreamReader file = new StreamReader(filePath))
+            {
+                string ln;
+
+                ln = file.ReadLine();
+                numberOfVariables = HowManyVariablesInLine(ln);
+                CreateColumns(XColumns, numberOfVariables);
+
+                while ((ln = file.ReadLine()) != null)
+                {
+                    ln = ln.Replace(".", ",");
+                    string[] tokens = ln.Split(' ');
+
+                    for (int i = 0; i < numberOfVariables; i++)
+                    {
+                        if (i + 1 == numberOfVariables) // save output
+                        {
+                            double value = double.Parse(tokens[i]);
+                            Y.Add(value);
+                        }
+                        else // save input
+                        {
+                            double value = double.Parse(tokens[i]);
+                            XColumns[i].Add(value);
+                        }
+                    }
+
+                }
+                file.Close();
+            }
+        }
+
+        private static string AskUserForFileName()
+        {
+            Console.WriteLine("Put file name or file path (e.g. single.txt):");
+            string filePath = Console.ReadLine();
+            return filePath;
         }
 
         private static void AskUserForFunctionValue(RegressionCalculator calculator)
