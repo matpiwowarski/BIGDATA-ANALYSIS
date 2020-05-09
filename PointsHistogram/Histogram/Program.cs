@@ -41,13 +41,22 @@ namespace Histogram
                 {
                     using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
                     {
+                        int linesCount = reader.ReadInt32();
+
+                        long linesBytes = 26 * linesCount;
+                        long centerPosition = 4 + linesBytes / 2;
+
+                        reader.BaseStream.Position = centerPosition;
+
                         while (reader.BaseStream.Position != reader.BaseStream.Length)
                         {
                             NumberOfDataReads++;
-                            double x = reader.ReadDouble();
-                            double y = reader.ReadDouble();
-                            double z = reader.ReadDouble();
-                            short i = reader.ReadInt16();
+                            double x = reader.ReadDouble(); // 8 B
+                            double y = reader.ReadDouble(); // 8 B
+                            double z = reader.ReadDouble(); // 8 B
+                            short i = reader.ReadInt16();   // 2 B
+                                                            //------
+                                                            // 26 B
 
                             if (x >= minX && x <= maxX && y >= minY && y <= maxY)
                             {
