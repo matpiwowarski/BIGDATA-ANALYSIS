@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace QuadTree
@@ -7,69 +8,65 @@ namespace QuadTree
     {
         public static int Main(string[] args)
         {
-            /*if (args.Length < 2)
+            if (args.Length < 2)
             {
                 System.Console.WriteLine("Plese run program:\n program <input_file.txt> <preprocessed_file>");
                 return 1;
             }
             else
-            {*/
-
-            QuadTree quadTree = new QuadTree(0, 0, double.MaxValue, double.MaxValue); 
-            try
             {
-                // Read file using StreamReader. Reads file line by line    
-                using (StreamReader file = new StreamReader("Korte_Vegetation_all.txt")) // (args[0])
+                var inputFileName = args[0];
+                var outputFileName = args[1];
+
+                SortedDictionary<double, Point> sortedPoints = new SortedDictionary<double, Point>(new DuplicateKeyComparer<double>());
+
+                try
                 {
-                    string ln;
-
-                    while ((ln = file.ReadLine()) != null)
+                    // Read file using StreamReader. Reads file line by line    
+                    using (StreamReader file = new StreamReader(inputFileName)) // (args[0])
                     {
-                        ln = ln.Replace(".", ",");
-                        string[] tokens = ln.Split(' ');
+                        string ln;
 
-                        double x = double.Parse(tokens[0]);
-                        double y = double.Parse(tokens[1]);
-                        double z = double.Parse(tokens[2]);
-                        short i = short.Parse(tokens[3]);
+                        while ((ln = file.ReadLine()) != null)
+                        {
+                            ln = ln.Replace(".", ",");
+                            string[] tokens = ln.Split(' ');
 
-                        Point point = new Point(x, y, z, i);
+                            double x = double.Parse(tokens[0]);
+                            double y = double.Parse(tokens[1]);
+                            double z = double.Parse(tokens[2]);
+                            short i = short.Parse(tokens[3]);
 
-                        quadTree.TryToInsert(point);
+                            Point point = new Point(x, y, z, i);
+
+                            sortedPoints.Add(point.X, point);
+                        }
+                        file.Close();
                     }
-                    file.Close();
+
+                    // save sorted list in binary file
+                    SaveToBinaryFile(sortedPoints);
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine("The file could not be read:");
+                    Console.WriteLine(e.Message);
                 }
             }
-            catch (IOException e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
-
-            DisplayQuadTree(quadTree);
 
             return 0;
         }
 
-        static public void DisplayQuadTree(QuadTree q)
+        private static void SaveToBinaryFile(SortedDictionary<double, Point> sortedPoints)
         {
-            DisplayNodeWithChildren(q.Root);
+            
         }
 
-        private static void DisplayNodeWithChildren(Node node)
+        private static void DisplayPointList(SortedDictionary<double, Point> sortedPoints)
         {
-            if(node.nodeType == NodeType.BRANCH)
+            foreach(var p in sortedPoints)
             {
-                DisplayNodeWithChildren(node.NW);
-                DisplayNodeWithChildren(node.NE);
-                DisplayNodeWithChildren(node.SE);
-                DisplayNodeWithChildren(node.SW);
-                Console.WriteLine();
-            }
-            else if (node.nodeType == NodeType.LEAF)
-            {
-                DisplayPoint(node.Point);
-                return;
+                Console.WriteLine(p.Value.X + "   " + p.Value.Y);
             }
         }
 
