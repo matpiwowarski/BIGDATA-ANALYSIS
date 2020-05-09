@@ -7,9 +7,9 @@ namespace Histogram
     {
         public static int Main(string[] args)
         {
-            if (args.Length < 9)
+            if (args.Length < 8)
             {
-                System.Console.WriteLine("Plese run program:\n program <preprocessed_file> <M> <B> <minX> <maxX> <minY> <maxY> <bin_size> <selection>");
+                System.Console.WriteLine("Plese run program:\n program <preprocessed_file> <M> <minX> <maxX> <minY> <maxY> <bin_size> <selection>");
                 return 1;
             }
             else
@@ -18,13 +18,15 @@ namespace Histogram
                 // read user parameters
                 string fileName = args[0];
                 int M = int.Parse(args[1]);
-                int B = int.Parse(args[2]);
-                double minX = Double.Parse(args[3]);
-                double maxX = Double.Parse(args[4]);
-                double minY = Double.Parse(args[5]);
-                double maxY = Double.Parse(args[6]);
-                int binSize = int.Parse(args[7]);
-                char selection = char.Parse(args[8].ToLower());
+                // 38 461 points => 999 986 B => close to 1 M
+                int maxSizeOfMemoryUsage = 999986 * M;
+
+                double minX = Double.Parse(args[2]);
+                double maxX = Double.Parse(args[3]);
+                double minY = Double.Parse(args[4]);
+                double maxY = Double.Parse(args[5]);
+                int binSize = int.Parse(args[6]);
+                char selection = char.Parse(args[7].ToLower());
 
                 SelectionType selectionType = SelectionType.I;
                 if (selection == 'i')
@@ -39,102 +41,112 @@ namespace Histogram
 
                 try
                 {
-                    long foundIndex = 0;
                     using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
                     {
-                        bool finishedRead = false;
-                        int linesCount = reader.ReadInt32();
 
-                        long linesBytes = 26 * linesCount;
-                        long centerPosition = 4 + linesBytes / 2;
+                        byte[] chunk = reader.ReadBytes(maxSizeOfMemoryUsage);
+                        NumberOfDataReads++;
 
-                        bool foundValueToRead = false;
-                        bool readFirstValue = false;
-                        reader.BaseStream.Position = centerPosition;
+                        int numOfPoints = 38461 / 2;
+                        bool foundX = false;
+                        bool foundlastX = false;
+                        int indexOfFirstX = 0;
 
-                        while (reader.BaseStream.Position != reader.BaseStream.Length && finishedRead == false)
+                        while(chunk.Length > 0)
                         {
+                            int index = numOfPoints * 26;
+                            if (foundX)
+                                index = 0;
+
+                            while (index < chunk.Length && index >= 0 && foundX == false)
+                            {
+                                double lastX = BitConverter.ToDouble(chunk, maxSizeOfMemoryUsage - 26);
+                                if(lastX < minX)
+                                {
+                                    break;
+                                }
+                                double x = BitConverter.ToDouble(chunk, index); // 8 B
+                                index += 26;
+
+                                if (x >= minX && x <= maxX)
+                                {
+                                    foundX = true;
+                                    indexOfFirstX = index;
+                                }
+                                else if(x < minX)
+                                {
+                                    numOfPoints = numOfPoints / 2;
+                                    index += numOfPoints * 26;
+                                }
+                                else if(x > maxX)
+                                {
+                                    numOfPoints = numOfPoints / 2;
+                                    index -= numOfPoints * 26;
+                                }
+                            }
+
+                            if(foundX)
+                            {
+                                index -= 26;
+                                while(index >= 0)
+                                {
+                                    double x = BitConverter.ToDouble(chunk, index); // 8 B
+                                    if (x >= minX && x <= maxX)
+                                    {
+                                        indexOfFirstX = index;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                    index -= 26;
+                                }
+                                index += 26;
+                            }
+
+                            if(foundX)
+                            {
+                            
+                                while(index < chunk.Length && foundlastX == false)
+                                {
+                                    double x = BitConverter.ToDouble(chunk, index); // 8 B
+                                    index += 8;
+                                    double y = BitConverter.ToDouble(chunk, index); // 8 B
+                                    index += 8;
+                                    double z = BitConverter.ToDouble(chunk, index); // 8 B
+                                    index += 8;
+                                    short i = BitConverter.ToInt16(chunk, index); // 2 B
+                                    index += 2;
+                                    //------
+                                    // 26 B
+                                    if (x >= minX && x <= maxX)
+                                    {
+                                       if(y >= minY && y <= maxY)
+                                        {
+                                            if (selectionType == SelectionType.I)
+                                            {
+                                                histogram.InsertValue(i);
+                                            }
+                                            else if (selectionType == SelectionType.Z)
+                                            {
+                                                histogram.InsertValue(z);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foundlastX = true;
+                                    }
+                                }
+                            }
+
+                            if(foundlastX)
+                            {
+                                break;
+                            }
+
+                            chunk = reader.ReadBytes(maxSizeOfMemoryUsage);
                             NumberOfDataReads++;
-                            double x = reader.ReadDouble(); // 8 B
-                            double y = reader.ReadDouble(); // 8 B
-                            double z = reader.ReadDouble(); // 8 B
-                            short i = reader.ReadInt16();   // 2 B
-                                                            //------
-                                                            // 26 B
-                            if (x >= minX && x <= maxX)
-                            {
-
-                                if(y >= minY && y <= maxY)
-                                {
-                                    foundValueToRead = true;
-                                    if(readFirstValue == false)
-                                    {
-                                        foundIndex = reader.BaseStream.Position;
-                                        readFirstValue = true;
-                                    }
-
-                                    if (selectionType == SelectionType.I)
-                                    {
-                                        histogram.InsertValue(i);
-                                    }
-                                    else if (selectionType == SelectionType.Z)
-                                    {
-                                        histogram.InsertValue(z);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (foundValueToRead == true)
-                                    finishedRead = true;
-
-                                if(x > minX )
-                                {
-                                    linesCount = linesCount / 2;
-                                    reader.BaseStream.Position -= linesCount * 26;
-                                }
-                                else if(x < maxX)
-                                {
-                                    linesCount = linesCount / 2;
-                                    reader.BaseStream.Position += linesCount * 26;
-                                }
-                            }
-                        }
-
-                        finishedRead = false;
-                        int count = 2;
-                        while (finishedRead == false)
-                        {
-                            reader.BaseStream.Position = foundIndex - count * 26;
-
-                            count++;
-
-                            NumberOfDataReads++;
-                            double x = reader.ReadDouble(); // 8 B
-                            double y = reader.ReadDouble(); // 8 B
-                            double z = reader.ReadDouble(); // 8 B
-                            short i = reader.ReadInt16();   // 2 B
-                                                            //------
-                                                            // 26 B
-                            if (x >= minX && x <= maxX)
-                            {
-
-                                if (y >= minY && y <= maxY)
-                                {
-                                    if (selectionType == SelectionType.I)
-                                    {
-                                        histogram.InsertValue(i);
-                                    }
-                                    else if (selectionType == SelectionType.Z)
-                                    {
-                                        histogram.InsertValue(z);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                finishedRead = true;
-                            }
                         }
                     }
                 }

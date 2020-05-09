@@ -61,7 +61,6 @@ namespace QuadTree
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
             {
-                writer.Write(sortedPoints.Count);
                 foreach(var p in sortedPoints)
                 {
                     writer.Write(p.Value.X);
