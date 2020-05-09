@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTree", "QuadTree\QuadTree.csproj", "{B6408735-84AD-4CB3-AA70-A76629DC22B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Preprocess", "QuadTree\Preprocess.csproj", "{B6408735-84AD-4CB3-AA70-A76629DC22B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Histogram", "Histogram\Histogram.csproj", "{9BA6F5D4-8493-45E1-9A54-5B01F2E633D1}"
 EndProject

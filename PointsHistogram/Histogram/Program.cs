@@ -39,35 +39,28 @@ namespace Histogram
 
                 try
                 {
-                    // Read file using StreamReader. Reads file line by line    
-                    using (StreamReader file = new StreamReader(fileName))
+                    using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
                     {
-                        string ln;
-
-                        while ((ln = file.ReadLine()) != null)
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
                         {
                             NumberOfDataReads++;
-                            ln = ln.Replace(".", ",");
-                            string[] tokens = ln.Split(' ');
-
-                            double x = double.Parse(tokens[0]);
-                            double y = double.Parse(tokens[1]);
+                            double x = reader.ReadDouble();
+                            double y = reader.ReadDouble();
+                            double z = reader.ReadDouble();
+                            short i = reader.ReadInt16();
 
                             if (x >= minX && x <= maxX && y >= minY && y <= maxY)
                             {
                                 if (selectionType == SelectionType.I)
                                 {
-                                    short i = short.Parse(tokens[3]);
                                     histogram.InsertValue(i);
                                 }
-                                else if(selectionType == SelectionType.Z)
+                                else if (selectionType == SelectionType.Z)
                                 {
-                                    double z = Double.Parse(tokens[3]);
                                     histogram.InsertValue(z);
                                 }
                             }
                         }
-                        file.Close();
                     }
                 }
                 catch (IOException e)

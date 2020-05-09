@@ -45,7 +45,7 @@ namespace QuadTree
                     }
 
                     // save sorted list in binary file
-                    SaveToBinaryFile(sortedPoints);
+                    SaveToBinaryFile(sortedPoints, outputFileName);
                 }
                 catch (IOException e)
                 {
@@ -57,9 +57,18 @@ namespace QuadTree
             return 0;
         }
 
-        private static void SaveToBinaryFile(SortedDictionary<double, Point> sortedPoints)
+        private static void SaveToBinaryFile(SortedDictionary<double, Point> sortedPoints, string fileName)
         {
-            
+            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            {
+                foreach(var p in sortedPoints)
+                {
+                    writer.Write(p.Value.X);
+                    writer.Write(p.Value.Y);
+                    writer.Write(p.Value.Z);
+                    writer.Write(p.Value.I);
+                }
+            }
         }
 
         private static void DisplayPointList(SortedDictionary<double, Point> sortedPoints)

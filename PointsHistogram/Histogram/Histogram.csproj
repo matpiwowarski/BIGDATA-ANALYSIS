@@ -43,7 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\QuadTree\QuadTree.csproj">
       <Project>{B6408735-84AD-4CB3-AA70-A76629DC22B3}</Project>
-      <Name>QuadTree</Name>
+      <Name>Preprocess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
