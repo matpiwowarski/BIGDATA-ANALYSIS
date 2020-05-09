@@ -39,16 +39,20 @@ namespace Histogram
 
                 try
                 {
+                    long foundIndex = 0;
                     using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
                     {
+                        bool finishedRead = false;
                         int linesCount = reader.ReadInt32();
 
                         long linesBytes = 26 * linesCount;
                         long centerPosition = 4 + linesBytes / 2;
 
+                        bool foundValueToRead = false;
+                        bool readFirstValue = false;
                         reader.BaseStream.Position = centerPosition;
 
-                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        while (reader.BaseStream.Position != reader.BaseStream.Length && finishedRead == false)
                         {
                             NumberOfDataReads++;
                             double x = reader.ReadDouble(); // 8 B
@@ -57,17 +61,79 @@ namespace Histogram
                             short i = reader.ReadInt16();   // 2 B
                                                             //------
                                                             // 26 B
-
-                            if (x >= minX && x <= maxX && y >= minY && y <= maxY)
+                            if (x >= minX && x <= maxX)
                             {
-                                if (selectionType == SelectionType.I)
+
+                                if(y >= minY && y <= maxY)
                                 {
-                                    histogram.InsertValue(i);
+                                    foundValueToRead = true;
+                                    if(readFirstValue == false)
+                                    {
+                                        foundIndex = reader.BaseStream.Position;
+                                        readFirstValue = true;
+                                    }
+
+                                    if (selectionType == SelectionType.I)
+                                    {
+                                        histogram.InsertValue(i);
+                                    }
+                                    else if (selectionType == SelectionType.Z)
+                                    {
+                                        histogram.InsertValue(z);
+                                    }
                                 }
-                                else if (selectionType == SelectionType.Z)
+                            }
+                            else
+                            {
+                                if (foundValueToRead == true)
+                                    finishedRead = true;
+
+                                if(x > minX )
                                 {
-                                    histogram.InsertValue(z);
+                                    linesCount = linesCount / 2;
+                                    reader.BaseStream.Position -= linesCount * 26;
                                 }
+                                else if(x < maxX)
+                                {
+                                    linesCount = linesCount / 2;
+                                    reader.BaseStream.Position += linesCount * 26;
+                                }
+                            }
+                        }
+
+                        finishedRead = false;
+                        int count = 2;
+                        while (finishedRead == false)
+                        {
+                            reader.BaseStream.Position = foundIndex - count * 26;
+
+                            count++;
+
+                            NumberOfDataReads++;
+                            double x = reader.ReadDouble(); // 8 B
+                            double y = reader.ReadDouble(); // 8 B
+                            double z = reader.ReadDouble(); // 8 B
+                            short i = reader.ReadInt16();   // 2 B
+                                                            //------
+                                                            // 26 B
+                            if (x >= minX && x <= maxX)
+                            {
+
+                                if (y >= minY && y <= maxY)
+                                {
+                                    if (selectionType == SelectionType.I)
+                                    {
+                                        histogram.InsertValue(i);
+                                    }
+                                    else if (selectionType == SelectionType.Z)
+                                    {
+                                        histogram.InsertValue(z);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                finishedRead = true;
                             }
                         }
                     }
